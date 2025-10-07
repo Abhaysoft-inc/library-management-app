@@ -17,7 +17,12 @@ import {
     AlertCircle,
     TrendingUp,
     UserCheck,
-    UserX
+    UserX,
+    Menu,
+    X,
+    BarChart3,
+    BookMarked,
+    ArrowRightLeft
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -28,6 +33,7 @@ const LibrarianDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Dashboard data state
     const [dashboardData, setDashboardData] = useState({
@@ -422,42 +428,51 @@ const LibrarianDashboard = () => {
                         </div>
                     </nav>
                 </div>
-            </div>
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Top Header */}
-                <header className="bg-white shadow-sm border-b border-gray-200">
-                    <div className="px-6 py-4">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h1 className="text-2xl font-bold text-gray-900">
-                                    {activeTab === 'overview' && 'Dashboard Overview'}
-                                    {activeTab === 'books' && 'Manage Books'}
-                                    {activeTab === 'transactions' && 'Book Transactions'}
-                                    {activeTab === 'students' && 'Student Management'}
-                                    {activeTab === 'pending' && 'Pending Approvals'}
-                                </h1>
-                                <p className="text-gray-600">Welcome back, {user?.name}</p>
-                            </div>
+                {/* Main Content */}
+                <div className="flex-1 lg:ml-64">
+                    {/* Top Header */}
+                    <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-30">
+                        <div className="px-4 sm:px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    {/* Mobile menu button */}
+                                    <button
+                                        onClick={() => setSidebarOpen(true)}
+                                        className="lg:hidden -ml-0.5 -mt-0.5 h-12 w-12 inline-flex items-center justify-center rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors"
+                                        aria-label="Open sidebar"
+                                    >
+                                        <Menu className="h-6 w-6" />
+                                    </button>
+                                    <div className="ml-4 lg:ml-0">
+                                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                                            {activeTab === 'overview' && 'Dashboard Overview'}
+                                            {activeTab === 'books' && 'Manage Books'}
+                                            {activeTab === 'transactions' && 'Book Transactions'}
+                                            {activeTab === 'students' && 'Student Management'}
+                                            {activeTab === 'pending' && 'Pending Approvals'}
+                                        </h1>
+                                        <p className="text-gray-600 text-sm sm:text-base">Welcome back, {user?.name}</p>
+                                    </div>
+                                </div>
 
                             {/* Stats Summary */}
-                            <div className="flex items-center space-x-6">
+                            <div className="hidden sm:flex items-center space-x-4 lg:space-x-6">
                                 <div className="text-center">
-                                    <p className="text-sm text-gray-600">Total Books</p>
-                                    <p className="text-lg font-bold text-blue-600">{dashboardData.books.length}</p>
+                                    <p className="text-xs sm:text-sm text-gray-600">Total Books</p>
+                                    <p className="text-sm sm:text-lg font-bold text-blue-600">{dashboardData.books.length}</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-sm text-gray-600">Students</p>
-                                    <p className="text-lg font-bold text-green-600">{dashboardData.students.length}</p>
+                                    <p className="text-xs sm:text-sm text-gray-600">Students</p>
+                                    <p className="text-sm sm:text-lg font-bold text-green-600">{dashboardData.students.length}</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-sm text-gray-600">Issued</p>
-                                    <p className="text-lg font-bold text-orange-600">{dashboardData.stats.issuedBooks}</p>
+                                    <p className="text-xs sm:text-sm text-gray-600">Issued</p>
+                                    <p className="text-sm sm:text-lg font-bold text-orange-600">{dashboardData.stats.issuedBooks}</p>
                                 </div>
                                 <div className="text-center">
-                                    <p className="text-sm text-gray-600">Overdue</p>
-                                    <p className="text-lg font-bold text-red-600">{dashboardData.stats.overdueBooks}</p>
+                                    <p className="text-xs sm:text-sm text-gray-600">Overdue</p>
+                                    <p className="text-sm sm:text-lg font-bold text-red-600">{dashboardData.stats.overdueBooks}</p>
                                 </div>
                             </div>
                         </div>
@@ -470,7 +485,7 @@ const LibrarianDashboard = () => {
                 </header>
 
                 {/* Main Content Area */}
-                <main className="flex-1 overflow-auto p-6">
+                <main className="flex-1 overflow-auto p-4 sm:p-6">
                     {/* Tab Content */}
                     {activeTab === 'overview' && (
                         <>
@@ -1306,6 +1321,7 @@ const LibrarianDashboard = () => {
                         </div>
                     )}
                 </main>
+                </div>
             </div>
         </div>
     );
