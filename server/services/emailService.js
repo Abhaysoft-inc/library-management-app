@@ -182,6 +182,26 @@ class EmailService {
 
         return await this.sendEmail(studentEmail, subject, html);
     }
+    // Password reset email
+    async sendPasswordResetEmail(studentEmail, studentName, resetUrl) {
+        const subject = 'Password Reset Request';
+        const html = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2 style="color: #2563eb;">Password Reset Request</h2>
+                <p>Dear ${studentName},</p>
+                <p>We received a request to reset your password. Click the link below to set a new password:</p>
+                <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <a href="${resetUrl}" style="background-color: #2563eb; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+                </div>
+                <p>If you did not request a password reset, please ignore this email.</p>
+                <br>
+                <p>Best regards,<br>
+                EE Department Library Team</p>
+            </div>
+        `;
+
+        return await this.sendEmail(studentEmail, subject, html);
+    }
 }
 
 module.exports = new EmailService();

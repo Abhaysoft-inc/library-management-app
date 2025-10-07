@@ -316,4 +316,70 @@ router.post('/change-password', authenticate, async (req, res) => {
     }
 });
 
+
+// forgot password and reset password :
+router.post('/forgot-password', async (req, res) => {
+    try {
+        const {email} = req.body;
+        const user = await User.findOne({email: email.toLowerCase()});
+        if (!user){
+            return res.status(404).json({
+                success: false,
+                message: 'User with this email does not exist'
+            });
+        }
+        
+        // Generate reset token
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.passwordResetToken = resetToken;
+        user.passwordResetExpires = Date.now() + 3600000; // 1 hour
+        await user.save();
+
+        // Send reset email
+        const resetUrl = `http://localhost:3000/reset-password/${resetToken}`; // Update with your frontend URL
+        emailService.sendPasswordResetEmail(user.email, user.name, resetUrl);
+
+
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error during password reset'
+        });
+    }
+
+});
+router.post('/reset-password/:token', async (req, res) => {
+    try {
+        const {token} = req.params;
+        const {newPassword} = req.body;
+
+        const user = await User.findOne({
+            passwordResetToken: token,
+            passwordResetExpires: {$gt: Date.now()}
+        });
+        if (!user){
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid or expired password reset token'
+            });
+        }
+
+        // Update password
+        user.password = newPassword;
+        user.passwordResetToken = undefined;
+        user.passwordResetExpires = undefined;
+        await user.save();
+        
+        res.json({
+            success: true,
+            message: 'Password has been reset successfully'
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Server error during password reset'
+        });
+    }
+});
 module.exports = router;
