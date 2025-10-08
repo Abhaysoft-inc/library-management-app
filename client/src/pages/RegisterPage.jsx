@@ -26,7 +26,6 @@ const RegisterPage = () => {
         confirmPassword: '',
         phone: '',
         year: '',
-        branch: '',
         address: {
             street: '',
             city: '',
@@ -42,61 +41,42 @@ const RegisterPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
 
-    // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard', { replace: true });
         }
     }, [isAuthenticated, navigate]);
 
-    // Clear error when component mounts
     useEffect(() => {
         dispatch(clearError());
     }, [dispatch]);
 
-    const branches = [
-        'Power Systems',
-        'Electronics & Communication',
-        'Control Systems',
-        'Electrical Machines',
-        'Power Electronics',
-        'Renewable Energy',
-        'General',
-    ];
-
     const validateForm = () => {
         const errors = {};
 
-        // Roll number validation (5 digits)
         if (!formData.studentId.match(/^\d{5}$/)) {
             errors.studentId = 'Roll number must be exactly 5 digits (e.g., 24305)';
         }
 
-        // Email validation
         if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
             errors.email = 'Please enter a valid email address';
         }
 
-        // Password validation
         if (formData.password.length < 6) {
             errors.password = 'Password must be at least 6 characters long';
         }
 
-        // Confirm password validation
         if (formData.password !== formData.confirmPassword) {
             errors.confirmPassword = 'Passwords do not match';
         }
 
-        // Phone validation
         if (!formData.phone.match(/^\d{10}$/)) {
             errors.phone = 'Phone number must be 10 digits';
         }
 
-        // Required fields
-        const requiredFields = ['studentId', 'name', 'email', 'password', 'phone', 'year', 'branch'];
+        const requiredFields = ['studentId', 'name', 'email', 'password', 'phone', 'year'];
         requiredFields.forEach(field => {
             if (!formData[field]) {
                 errors[field] = 'This field is required';
@@ -109,7 +89,6 @@ const RegisterPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         if (name.startsWith('address.')) {
             const addressField = name.split('.')[1];
             setFormData(prev => ({
@@ -119,35 +98,35 @@ const RegisterPage = () => {
                     [addressField]: value,
                 },
             }));
+            // پاک کردن ارور آدرس
+            if (formErrors[addressField]) {
+                setFormErrors(prev => ({
+                    ...prev,
+                    [addressField]: '',
+                }));
+            }
         } else {
             setFormData(prev => ({
                 ...prev,
                 [name]: value,
             }));
-        }
-
-        // Clear field error when user starts typing
-        if (formErrors[name]) {
-            setFormErrors(prev => ({
-                ...prev,
-                [name]: '',
-            }));
+            if (formErrors[name]) {
+                setFormErrors(prev => ({
+                    ...prev,
+                    [name]: '',
+                }));
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         try {
             const result = await dispatch(registerUser(formData));
-
             if (registerUser.fulfilled.match(result)) {
                 setSuccessMessage('Registration successful! Please wait for admin approval before you can log in.');
-                // Reset form
                 setFormData({
                     studentId: '',
                     name: '',
@@ -156,7 +135,6 @@ const RegisterPage = () => {
                     confirmPassword: '',
                     phone: '',
                     year: '',
-                    branch: '',
                     address: {
                         street: '',
                         city: '',
@@ -185,10 +163,7 @@ const RegisterPage = () => {
                     </h2>
                     <p className="mt-2 text-sm text-gray-600">
                         Already have an account?{' '}
-                        <Link
-                            to="/login"
-                            className="font-medium text-blue-600 hover:text-blue-500"
-                        >
+                        <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
                             Sign in here
                         </Link>
                     </p>
@@ -201,12 +176,8 @@ const RegisterPage = () => {
                                 <div className="flex">
                                     <CheckCircle className="h-5 w-5 text-green-400" />
                                     <div className="ml-3">
-                                        <h3 className="text-sm font-medium text-green-800">
-                                            Registration Successful!
-                                        </h3>
-                                        <div className="mt-2 text-sm text-green-700">
-                                            {successMessage}
-                                        </div>
+                                        <h3 className="text-sm font-medium text-green-800">Registration Successful!</h3>
+                                        <div className="mt-2 text-sm text-green-700">{successMessage}</div>
                                     </div>
                                 </div>
                             </div>
@@ -217,32 +188,22 @@ const RegisterPage = () => {
                                 <div className="flex">
                                     <AlertCircle className="h-5 w-5 text-red-400" />
                                     <div className="ml-3">
-                                        <h3 className="text-sm font-medium text-red-800">
-                                            Registration Failed
-                                        </h3>
-                                        <div className="mt-2 text-sm text-red-700">
-                                            {error}
-                                        </div>
+                                        <h3 className="text-sm font-medium text-red-800">Registration Failed</h3>
+                                        <div className="mt-2 text-sm text-red-700">{error}</div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            {/* Personal Information */}
                             <div className="space-y-6">
                                 <div>
-                                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                                        Personal Information
-                                    </h3>
+                                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Personal Information</h3>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                    {/* Roll Number */}
                                     <div>
-                                        <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">
-                                            Roll Number *
-                                        </label>
+                                        <label htmlFor="studentId" className="block text-sm font-medium text-gray-700">Roll Number *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Hash className="h-5 w-5 text-gray-400" />
@@ -255,21 +216,15 @@ const RegisterPage = () => {
                                                 maxLength="5"
                                                 value={formData.studentId}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.studentId ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.studentId ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="24305"
                                             />
                                         </div>
-                                        {formErrors.studentId && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.studentId}</p>
-                                        )}
+                                        {formErrors.studentId && <p className="mt-2 text-sm text-red-600">{formErrors.studentId}</p>}
                                     </div>
 
-                                    {/* Full Name */}
                                     <div>
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                            Full Name *
-                                        </label>
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <User className="h-5 w-5 text-gray-400" />
@@ -281,21 +236,15 @@ const RegisterPage = () => {
                                                 required
                                                 value={formData.name}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.name ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.name ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="Enter your full name"
                                             />
                                         </div>
-                                        {formErrors.name && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.name}</p>
-                                        )}
+                                        {formErrors.name && <p className="mt-2 text-sm text-red-600">{formErrors.name}</p>}
                                     </div>
 
-                                    {/* Email */}
                                     <div>
-                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                            Email Address *
-                                        </label>
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Mail className="h-5 w-5 text-gray-400" />
@@ -307,21 +256,15 @@ const RegisterPage = () => {
                                                 required
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.email ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.email ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="Enter your email"
                                             />
                                         </div>
-                                        {formErrors.email && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.email}</p>
-                                        )}
+                                        {formErrors.email && <p className="mt-2 text-sm text-red-600">{formErrors.email}</p>}
                                     </div>
 
-                                    {/* Phone */}
                                     <div>
-                                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                            Phone Number *
-                                        </label>
+                                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Phone className="h-5 w-5 text-gray-400" />
@@ -334,23 +277,17 @@ const RegisterPage = () => {
                                                 maxLength="10"
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.phone ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.phone ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="1234567890"
                                             />
                                         </div>
-                                        {formErrors.phone && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.phone}</p>
-                                        )}
+                                        {formErrors.phone && <p className="mt-2 text-sm text-red-600">{formErrors.phone}</p>}
                                     </div>
                                 </div>
 
-                                {/* Password Fields */}
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div>
-                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                            Password *
-                                        </label>
+                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Lock className="h-5 w-5 text-gray-400" />
@@ -362,31 +299,18 @@ const RegisterPage = () => {
                                                 required
                                                 value={formData.password}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.password ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.password ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="Enter password"
                                             />
-                                            <button
-                                                type="button"
-                                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                                onClick={() => setShowPassword(!showPassword)}
-                                            >
-                                                {showPassword ? (
-                                                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" />
-                                                ) : (
-                                                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />
-                                                )}
+                                            <button type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center" onClick={() => setShowPassword(!showPassword)}>
+                                                {showPassword ? <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" /> : <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />}
                                             </button>
                                         </div>
-                                        {formErrors.password && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.password}</p>
-                                        )}
+                                        {formErrors.password && <p className="mt-2 text-sm text-red-600">{formErrors.password}</p>}
                                     </div>
 
                                     <div>
-                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                                            Confirm Password *
-                                        </label>
+                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <Lock className="h-5 w-5 text-gray-400" />
@@ -398,42 +322,18 @@ const RegisterPage = () => {
                                                 required
                                                 value={formData.confirmPassword}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-10 py-2 border rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.confirmPassword ? 'border-red-300' : 'border-gray-300'}`}
                                                 placeholder="Confirm password"
                                             />
-                                            <button
-                                                type="button"
-                                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                            >
-                                                {showConfirmPassword ? (
-                                                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" />
-                                                ) : (
-                                                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />
-                                                )}
+                                            <button type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                                {showConfirmPassword ? <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" /> : <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />}
                                             </button>
                                         </div>
-                                        {formErrors.confirmPassword && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.confirmPassword}</p>
-                                        )}
+                                        {formErrors.confirmPassword && <p className="mt-2 text-sm text-red-600">{formErrors.confirmPassword}</p>}
                                     </div>
-                                </div>
-                            </div>
 
-                            {/* Academic Information */}
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                                        Academic Information
-                                    </h3>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div>
-                                        <label htmlFor="year" className="block text-sm font-medium text-gray-700">
-                                            Year *
-                                        </label>
+                                        <label htmlFor="year" className="block text-sm font-medium text-gray-700">Academic Year *</label>
                                         <div className="mt-1 relative">
                                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <GraduationCap className="h-5 w-5 text-gray-400" />
@@ -444,8 +344,7 @@ const RegisterPage = () => {
                                                 required
                                                 value={formData.year}
                                                 onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.year ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
+                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.year ? 'border-red-300' : 'border-gray-300'}`}
                                             >
                                                 <option value="">Select Year</option>
                                                 <option value="1">1st Year</option>
@@ -454,157 +353,103 @@ const RegisterPage = () => {
                                                 <option value="4">4th Year</option>
                                             </select>
                                         </div>
-                                        {formErrors.year && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.year}</p>
-                                        )}
+                                        {formErrors.year && <p className="mt-2 text-sm text-red-600">{formErrors.year}</p>}
                                     </div>
+                                </div>
 
+                                <div className="space-y-6">
                                     <div>
-                                        <label htmlFor="branch" className="block text-sm font-medium text-gray-700">
-                                            Specialization *
-                                        </label>
-                                        <div className="mt-1">
-                                            <select
-                                                id="branch"
-                                                name="branch"
-                                                required
-                                                value={formData.branch}
-                                                onChange={handleChange}
-                                                className={`appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${formErrors.branch ? 'border-red-300' : 'border-gray-300'
-                                                    }`}
-                                            >
-                                                <option value="">Select Specialization</option>
-                                                {branches.map((branch) => (
-                                                    <option key={branch} value={branch}>
-                                                        {branch}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        {formErrors.branch && (
-                                            <p className="mt-2 text-sm text-red-600">{formErrors.branch}</p>
-                                        )}
+                                        <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
+                                            Address (Optional)
+                                        </h3>
                                     </div>
-                                </div>
-                            </div>
 
-                            {/* Address (Optional) */}
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">
-                                        Address (Optional)
-                                    </h3>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="address.street" className="block text-sm font-medium text-gray-700">
-                                            Street Address
-                                        </label>
-                                        <div className="mt-1 relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <MapPin className="h-5 w-5 text-gray-400" />
+                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div className="sm:col-span-2">
+                                            <label htmlFor="address.street" className="block text-sm font-medium text-gray-700">
+                                                Street Address
+                                            </label>
+                                            <div className="mt-1 relative">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <MapPin className="h-5 w-5 text-gray-400" />
+                                                </div>
+                                                <input
+                                                    id="address.street"
+                                                    name="address.street"
+                                                    type="text"
+                                                    value={formData.address.street}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                    placeholder="Enter street address"
+                                                />
                                             </div>
-                                            <input
-                                                id="address.street"
-                                                name="address.street"
-                                                type="text"
-                                                value={formData.address.street}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                placeholder="Enter street address"
-                                            />
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label htmlFor="address.city" className="block text-sm font-medium text-gray-700">
-                                            City
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.city"
-                                                name="address.city"
-                                                type="text"
-                                                value={formData.address.city}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                placeholder="Enter city"
-                                            />
+                                        <div>
+                                            <label htmlFor="address.city" className="block text-sm font-medium text-gray-700">
+                                                City
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.city"
+                                                    name="address.city"
+                                                    type="text"
+                                                    value={formData.address.city}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                    placeholder="Enter city"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label htmlFor="address.state" className="block text-sm font-medium text-gray-700">
-                                            State
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.state"
-                                                name="address.state"
-                                                type="text"
-                                                value={formData.address.state}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                placeholder="Enter state"
-                                            />
+                                        <div>
+                                            <label htmlFor="address.state" className="block text-sm font-medium text-gray-700">
+                                                State
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.state"
+                                                    name="address.state"
+                                                    type="text"
+                                                    value={formData.address.state}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                    placeholder="Enter state"
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <label htmlFor="address.pincode" className="block text-sm font-medium text-gray-700">
-                                            PIN Code
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.pincode"
-                                                name="address.pincode"
-                                                type="text"
-                                                maxLength="6"
-                                                value={formData.address.pincode}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                                                placeholder="Enter PIN code"
-                                            />
+                                        <div>
+                                            <label htmlFor="address.pincode" className="block text-sm font-medium text-gray-700">
+                                                PIN Code
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.pincode"
+                                                    name="address.pincode"
+                                                    type="text"
+                                                    maxLength="6"
+                                                    value={formData.address.pincode}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                                    placeholder="Enter PIN code"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {isLoading ? (
-                                        <Loader2 className="h-5 w-5 animate-spin" />
-                                    ) : (
-                                        'Create Account'
-                                    )}
-                                </button>
+                                <div>
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none sm:text-sm"
+                                    >
+                                        {isLoading ? <Loader2 className="animate-spin h-5 w-5" /> : 'Register'}
+                                    </button>
+                                </div>
                             </div>
                         </form>
-
-                        <div className="mt-6">
-                            <div className="relative">
-                                <div className="absolute inset-0 flex items-center">
-                                    <div className="w-full border-t border-gray-300" />
-                                </div>
-                                <div className="relative flex justify-center text-sm">
-                                    <span className="px-2 bg-white text-gray-500">Already have an account?</span>
-                                </div>
-                            </div>
-
-                            <div className="mt-6">
-                                <Link
-                                    to="/login"
-                                    className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                >
-                                    Sign in to your account
-                                </Link>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
