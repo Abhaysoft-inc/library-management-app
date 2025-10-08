@@ -26,7 +26,6 @@ const RegisterPage = () => {
         confirmPassword: '',
         phone: '',
         year: '',
-        branch: '',
         address: {
             street: '',
             city: '',
@@ -42,61 +41,42 @@ const RegisterPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
 
-    // Redirect if already authenticated
     useEffect(() => {
         if (isAuthenticated) {
             navigate('/dashboard', { replace: true });
         }
     }, [isAuthenticated, navigate]);
 
-    // Clear error when component mounts
     useEffect(() => {
         dispatch(clearError());
     }, [dispatch]);
 
-    const branches = [
-        'Power Systems',
-        'Electronics & Communication',
-        'Control Systems',
-        'Electrical Machines',
-        'Power Electronics',
-        'Renewable Energy',
-        'General',
-    ];
-
     const validateForm = () => {
         const errors = {};
 
-        // Roll number validation (5 digits)
         if (!formData.studentId.match(/^\d{5}$/)) {
             errors.studentId = 'Roll number must be exactly 5 digits (e.g., 24305)';
         }
 
-        // Email validation
         if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
             errors.email = 'Please enter a valid email address';
         }
 
-        // Password validation
         if (formData.password.length < 6) {
             errors.password = 'Password must be at least 6 characters long';
         }
 
-        // Confirm password validation
         if (formData.password !== formData.confirmPassword) {
             errors.confirmPassword = 'Passwords do not match';
         }
 
-        // Phone validation
         if (!formData.phone.match(/^\d{10}$/)) {
             errors.phone = 'Phone number must be 10 digits';
         }
 
-        // Required fields
-        const requiredFields = ['studentId', 'name', 'email', 'password', 'phone', 'year', 'branch'];
+        const requiredFields = ['studentId', 'name', 'email', 'password', 'phone', 'year'];
         requiredFields.forEach(field => {
             if (!formData[field]) {
                 errors[field] = 'This field is required';
@@ -109,7 +89,6 @@ const RegisterPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         if (name.startsWith('address.')) {
             const addressField = name.split('.')[1];
             setFormData(prev => ({
@@ -119,35 +98,35 @@ const RegisterPage = () => {
                     [addressField]: value,
                 },
             }));
+            // پاک کردن ارور آدرس
+            if (formErrors[addressField]) {
+                setFormErrors(prev => ({
+                    ...prev,
+                    [addressField]: '',
+                }));
+            }
         } else {
             setFormData(prev => ({
                 ...prev,
                 [name]: value,
             }));
-        }
-
-        // Clear field error when user starts typing
-        if (formErrors[name]) {
-            setFormErrors(prev => ({
-                ...prev,
-                [name]: '',
-            }));
+            if (formErrors[name]) {
+                setFormErrors(prev => ({
+                    ...prev,
+                    [name]: '',
+                }));
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         try {
             const result = await dispatch(registerUser(formData));
-
             if (registerUser.fulfilled.match(result)) {
                 setSuccessMessage('Registration successful! Please wait for admin approval before you can log in.');
-                // Reset form
                 setFormData({
                     studentId: '',
                     name: '',
@@ -156,7 +135,6 @@ const RegisterPage = () => {
                     confirmPassword: '',
                     phone: '',
                     year: '',
-                    branch: '',
                     address: {
                         street: '',
                         city: '',
@@ -229,7 +207,6 @@ const RegisterPage = () => {
                         )}
 
                         <form className="space-y-6" onSubmit={handleSubmit}>
-                            {/* Personal Information */}
                             <div className="space-y-6">
                                 <div>
                                     <h3 className="text-lg font-medium text-gray-900 dark:text-white border-b dark:border-gray-700 pb-2">
@@ -238,7 +215,6 @@ const RegisterPage = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                    {/* Roll Number */}
                                     <div>
                                         <label htmlFor="studentId" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Roll Number *
@@ -265,7 +241,6 @@ const RegisterPage = () => {
                                         )}
                                     </div>
 
-                                    {/* Full Name */}
                                     <div>
                                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Full Name *
@@ -291,7 +266,6 @@ const RegisterPage = () => {
                                         )}
                                     </div>
 
-                                    {/* Email */}
                                     <div>
                                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Email Address *
@@ -317,7 +291,6 @@ const RegisterPage = () => {
                                         )}
                                     </div>
 
-                                    {/* Phone */}
                                     <div>
                                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Phone Number *
@@ -345,7 +318,6 @@ const RegisterPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Password Fields */}
                                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div>
                                         <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -418,8 +390,6 @@ const RegisterPage = () => {
                                             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.confirmPassword}</p>
                                         )}
                                     </div>
-                                </div>
-                            </div>
 
                             {/* Academic Information */}
                             <div className="space-y-6">
@@ -458,7 +428,9 @@ const RegisterPage = () => {
                                             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.year}</p>
                                         )}
                                     </div>
+                                </div>
 
+                                <div className="space-y-6">
                                     <div>
                                         <label htmlFor="branch" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                             Specialization *
@@ -515,7 +487,6 @@ const RegisterPage = () => {
                                                 placeholder="Enter street address"
                                             />
                                         </div>
-                                    </div>
 
                                     <div>
                                         <label htmlFor="address.city" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -532,7 +503,6 @@ const RegisterPage = () => {
                                                 placeholder="Enter city"
                                             />
                                         </div>
-                                    </div>
 
                                     <div>
                                         <label htmlFor="address.state" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -549,7 +519,6 @@ const RegisterPage = () => {
                                                 placeholder="Enter state"
                                             />
                                         </div>
-                                    </div>
 
                                     <div>
                                         <label htmlFor="address.pincode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -569,7 +538,6 @@ const RegisterPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                             <div>
                                 <button
