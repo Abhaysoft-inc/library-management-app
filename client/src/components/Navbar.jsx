@@ -42,11 +42,10 @@ const Navbar = () => {
   const NavLink = ({ to, children, icon: Icon }) => (
     <Link
       to={to}
-      className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-        isActiveRoute(to)
+      className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActiveRoute(to)
           ? 'bg-white text-blue-700 shadow-md hover:shadow-lg hover:scale-105'
           : 'text-white hover:bg-white/30 hover:text-white hover:scale-105'
-      }`}
+        }`}
     >
       <Icon size={18} />
       <span>{children}</span>
@@ -54,18 +53,21 @@ const Navbar = () => {
   );
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-      isScrolled 
-        ? 'bg-blue-900/30 backdrop-blur-md dark:bg-blue-950/50' 
+    <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
+        ? 'bg-blue-900/30 backdrop-blur-md dark:bg-blue-950/50'
         : 'bg-gradient-to-r from-blue-700 via-blue-900 to-blue-700 dark:from-blue-800 dark:via-blue-950 dark:to-blue-800'
-    }`}>
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 text-white font-bold text-xl hover:opacity-90 transition-opacity">
-              <BookOpen size={28} />
+              <img
+                src="/logo.png"
+                alt="EE Library Logo"
+                className="w-8 h-8 object-contain"
+              />
               <span>EE Library</span>
             </Link>
           </div>
@@ -107,9 +109,8 @@ const Navbar = () => {
 
                   {/* Animated dropdown */}
                   <div
-                    className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 transform transition-all duration-300 ease-in-out ${
-                      isProfileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                    }`}
+                    className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 transform transition-all duration-300 ease-in-out ${isProfileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                      }`}
                   >
                     <Link to="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200" onClick={() => setIsProfileMenuOpen(false)}>
                       <User size={16} /> Profile

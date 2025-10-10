@@ -324,10 +324,7 @@ const LibrarianDashboard = () => {
             <div className="w-64 bg-white shadow-lg">
                 <div className="flex flex-col h-full">
                     {/* Sidebar Header */}
-                    <div className="flex items-center justify-center h-16 px-4 bg-blue-600">
-                        <BookOpen className="h-8 w-8 text-white mr-2" />
-                        <h1 className="text-xl font-bold text-white">LibraryMS</h1>
-                    </div>
+
 
                     {/* User Info */}
                     <div className="p-4 border-b border-gray-200">
@@ -456,871 +453,866 @@ const LibrarianDashboard = () => {
                                     </div>
                                 </div>
 
-                            {/* Stats Summary */}
-                            <div className="hidden sm:flex items-center space-x-4 lg:space-x-6">
-                                <div className="text-center">
-                                    <p className="text-xs sm:text-sm text-gray-600">Total Books</p>
-                                    <p className="text-sm sm:text-lg font-bold text-blue-600">{dashboardData.books.length}</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-xs sm:text-sm text-gray-600">Students</p>
-                                    <p className="text-sm sm:text-lg font-bold text-green-600">{dashboardData.students.length}</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-xs sm:text-sm text-gray-600">Issued</p>
-                                    <p className="text-sm sm:text-lg font-bold text-orange-600">{dashboardData.stats.issuedBooks}</p>
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-xs sm:text-sm text-gray-600">Overdue</p>
-                                    <p className="text-sm sm:text-lg font-bold text-red-600">{dashboardData.stats.overdueBooks}</p>
+                                {/* Stats Summary */}
+                                <div className="hidden sm:flex items-center space-x-4 lg:space-x-6">
+                                    <div className="text-center">
+                                        <p className="text-xs sm:text-sm text-gray-600">Total Books</p>
+                                        <p className="text-sm sm:text-lg font-bold text-blue-600">{dashboardData.books.length}</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-xs sm:text-sm text-gray-600">Students</p>
+                                        <p className="text-sm sm:text-lg font-bold text-green-600">{dashboardData.students.length}</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-xs sm:text-sm text-gray-600">Issued</p>
+                                        <p className="text-sm sm:text-lg font-bold text-orange-600">{dashboardData.stats.issuedBooks}</p>
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-xs sm:text-sm text-gray-600">Overdue</p>
+                                        <p className="text-sm sm:text-lg font-bold text-red-600">{dashboardData.stats.overdueBooks}</p>
+                                    </div>
                                 </div>
                             </div>
+                            {error && (
+                                <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                                    {error}
+                                </div>
+                            )}
                         </div>
-                        {error && (
-                            <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                                {error}
-                            </div>
-                        )}
-                    </div>
-                </header>
+                    </header>
 
-                {/* Main Content Area */}
-                <main className="flex-1 overflow-auto p-4 sm:p-6">
-                    {/* Tab Content */}
-                    {activeTab === 'overview' && (
-                        <>
-                            {/* Stats Cards */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-                                <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600">Total Books</p>
-                                            <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.totalBooks}</p>
+                    {/* Main Content Area */}
+                    <main className="flex-1 overflow-auto p-4 sm:p-6">
+                        {/* Tab Content */}
+                        {activeTab === 'overview' && (
+                            <>
+                                {/* Stats Cards */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+                                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600">Total Books</p>
+                                                <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.totalBooks}</p>
+                                            </div>
+                                            <BookOpen className="h-12 w-12 text-blue-500" />
                                         </div>
-                                        <BookOpen className="h-12 w-12 text-blue-500" />
                                     </div>
-                                </div>
 
-                                <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600">Issued Books</p>
-                                            <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.issuedBooks}</p>
+                                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600">Issued Books</p>
+                                                <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.issuedBooks}</p>
+                                            </div>
+                                            <CheckCircle className="h-12 w-12 text-green-500" />
                                         </div>
-                                        <CheckCircle className="h-12 w-12 text-green-500" />
                                     </div>
-                                </div>
 
-                                <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600">Total Students</p>
-                                            <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.totalStudents}</p>
+                                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600">Total Students</p>
+                                                <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.totalStudents}</p>
+                                            </div>
+                                            <Users className="h-12 w-12 text-purple-500" />
                                         </div>
-                                        <Users className="h-12 w-12 text-purple-500" />
                                     </div>
-                                </div>
 
-                                <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600">Pending Students</p>
-                                            <p className="text-3xl font-bold text-gray-900">{dashboardData.pendingStudents.length}</p>
+                                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600">Pending Students</p>
+                                                <p className="text-3xl font-bold text-gray-900">{dashboardData.pendingStudents.length}</p>
+                                            </div>
+                                            <Clock className="h-12 w-12 text-orange-500" />
                                         </div>
-                                        <Clock className="h-12 w-12 text-orange-500" />
                                     </div>
-                                </div>
 
-                                <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
-                                    <div className="flex items-center justify-between">
-                                        <div>
-                                            <p className="text-sm font-medium text-gray-600">Overdue Books</p>
-                                            <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.overdueBooks}</p>
-                                        </div>
-                                        <AlertCircle className="h-12 w-12 text-red-500" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Quick Actions */}
-                            <div className="mb-8 bg-white rounded-lg shadow-md p-6">
-                                <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
-                                <div className="flex flex-wrap gap-4">
-                                    <button
-                                        onClick={() => setShowAddBookForm(true)}
-                                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                        <span>Add New Book</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setShowIssueBookForm(true)}
-                                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-                                    >
-                                        <Send className="h-4 w-4" />
-                                        <span>Issue Book</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setActiveTab('pending')}
-                                        className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
-                                    >
-                                        <Clock className="h-4 w-4" />
-                                        <span>Pending Approvals ({dashboardData.pendingStudents.length})</span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Overview Content */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* Recent Books */}
-                                <div className="bg-white rounded-lg shadow-md">
-                                    <div className="p-6 border-b border-gray-200">
-                                        <h3 className="text-lg font-semibold text-gray-900">Recent Books</h3>
-                                    </div>
-                                    <div className="p-6">
-                                        <div className="space-y-4">
-                                            {dashboardData.books.slice(0, 5).map((book) => (
-                                                <div key={book._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                                    <div className="flex-1">
-                                                        <p className="font-medium text-gray-900">{book.title}</p>
-                                                        <p className="text-sm text-gray-600">{book.author?.join(', ')}</p>
-                                                        <p className="text-sm text-gray-500">Available: {book.availableCopies}/{book.totalCopies}</p>
-                                                    </div>
-                                                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${book.availableCopies > 0
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : 'bg-red-100 text-red-800'
-                                                        }`}>
-                                                        {book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
-                                                    </span>
-                                                </div>
-                                            ))}
+                                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-red-500">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-sm font-medium text-gray-600">Overdue Books</p>
+                                                <p className="text-3xl font-bold text-gray-900">{dashboardData.stats.overdueBooks}</p>
+                                            </div>
+                                            <AlertCircle className="h-12 w-12 text-red-500" />
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Recent Transactions */}
-                                <div className="bg-white rounded-lg shadow-md">
-                                    <div className="p-6 border-b border-gray-200">
-                                        <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
-                                    </div>
-                                    <div className="p-6">
-                                        <div className="space-y-4">
-                                            {dashboardData.transactions.slice(0, 5).map((transaction) => (
-                                                <div key={transaction._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                                    <div className="flex-1">
-                                                        <p className="font-medium text-gray-900">{transaction.bookId?.title}</p>
-                                                        <p className="text-sm text-gray-600">{transaction.studentId?.name}</p>
-                                                        <p className="text-sm text-gray-500">Due: {formatDate(transaction.dueDate)}</p>
-                                                    </div>
-                                                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${transaction.status === 'issued' && isOverdue(transaction.dueDate)
-                                                        ? 'bg-red-100 text-red-800'
-                                                        : transaction.status === 'issued'
-                                                            ? 'bg-blue-100 text-blue-800'
-                                                            : 'bg-green-100 text-green-800'
-                                                        }`}>
-                                                        {transaction.status === 'issued' && isOverdue(transaction.dueDate)
-                                                            ? 'Overdue'
-                                                            : transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-                    {activeTab === 'books' && (
-                        <div className="bg-white rounded-lg shadow-md">
-                            <div className="p-6 border-b border-gray-200">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-lg font-semibold text-gray-900">Book Management</h3>
-                                    <div className="flex space-x-4">
-                                        <div className="relative">
-                                            <Search className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
-                                            <input
-                                                type="text"
-                                                placeholder="Search books..."
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            />
-                                        </div>
+                                {/* Quick Actions */}
+                                <div className="mb-8 bg-white rounded-lg shadow-md p-6">
+                                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                                    <div className="flex flex-wrap gap-4">
                                         <button
                                             onClick={() => setShowAddBookForm(true)}
                                             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
                                         >
                                             <Plus className="h-4 w-4" />
-                                            <span>Add Book</span>
+                                            <span>Add New Book</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setShowIssueBookForm(true)}
+                                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+                                        >
+                                            <Send className="h-4 w-4" />
+                                            <span>Issue Book</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setActiveTab('pending')}
+                                            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
+                                        >
+                                            <Clock className="h-4 w-4" />
+                                            <span>Pending Approvals ({dashboardData.pendingStudents.length})</span>
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="p-6">
-                                {filteredBooks.length === 0 ? (
-                                    <p className="text-gray-600 text-center py-8">No books found</p>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-gray-50">
-                                                <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copies</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-gray-200">
-                                                {filteredBooks.map((book) => (
-                                                    <tr key={book._id}>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div>
-                                                                <div className="text-sm font-medium text-gray-900">{book.title}</div>
-                                                                <div className="text-sm text-gray-500">{book.author?.join(', ')}</div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{book.category}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                            {book.availableCopies}/{book.totalCopies}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${book.availableCopies > 0
-                                                                ? 'bg-green-100 text-green-800'
-                                                                : 'bg-red-100 text-red-800'
-                                                                }`}>
-                                                                {book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                            <div className="flex space-x-2">
-                                                                <button
-                                                                    onClick={() => setSelectedBook(book)}
-                                                                    className="text-blue-600 hover:text-blue-900"
-                                                                >
-                                                                    <Eye className="h-4 w-4" />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => setEditingBook(book)}
-                                                                    className="text-green-600 hover:text-green-900"
-                                                                >
-                                                                    <Edit className="h-4 w-4" />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleDeleteBook(book._id)}
-                                                                    className="text-red-600 hover:text-red-900"
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
 
-                    {activeTab === 'transactions' && (
-                        <div className="bg-white rounded-lg shadow-md">
-                            <div className="p-6 border-b border-gray-200">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-lg font-semibold text-gray-900">Book Transactions</h3>
-                                    <button
-                                        onClick={() => setShowIssueBookForm(true)}
-                                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
-                                    >
-                                        <Send className="h-4 w-4" />
-                                        <span>Issue Book</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                {dashboardData.transactions.length === 0 ? (
-                                    <p className="text-gray-600 text-center py-8">No transactions found</p>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-gray-50">
-                                                <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Date</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-gray-200">
-                                                {dashboardData.transactions.map((transaction) => (
-                                                    <tr key={transaction._id}>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="text-sm font-medium text-gray-900">{transaction.bookId?.title}</div>
-                                                            <div className="text-sm text-gray-500">{transaction.bookId?.author?.join(', ')}</div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="text-sm font-medium text-gray-900">{transaction.studentId?.name}</div>
-                                                            <div className="text-sm text-gray-500">{transaction.studentId?.studentId}</div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                            {formatDate(transaction.issueDate)}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                            {formatDate(transaction.dueDate)}
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${transaction.status === 'issued' && isOverdue(transaction.dueDate)
-                                                                ? 'bg-red-100 text-red-800'
-                                                                : transaction.status === 'issued'
-                                                                    ? 'bg-blue-100 text-blue-800'
-                                                                    : 'bg-green-100 text-green-800'
-                                                                }`}>
-                                                                {transaction.status === 'issued' && isOverdue(transaction.dueDate)
-                                                                    ? 'Overdue'
-                                                                    : transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                            {transaction.status === 'issued' && (
-                                                                <button
-                                                                    onClick={() => handleCollectBook(transaction._id)}
-                                                                    className="bg-orange-600 text-white px-3 py-1 rounded-md hover:bg-orange-700 transition-colors text-xs"
-                                                                    title="Collect book from student"
-                                                                >
-                                                                    Collect Book
-                                                                </button>
-                                                            )}
-                                                            {transaction.status === 'returned' && (
-                                                                <span className="text-green-600 text-xs">Completed</span>
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'students' && (
-                        <div className="bg-white rounded-lg shadow-md">
-                            <div className="p-6 border-b border-gray-200">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="text-lg font-semibold text-gray-900">Student Management</h3>
-                                    <div className="relative">
-                                        <Search className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
-                                        <input
-                                            type="text"
-                                            placeholder="Search students..."
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="p-6">
-                                {filteredStudents.length === 0 ? (
-                                    <p className="text-gray-600 text-center py-8">No students found</p>
-                                ) : (
-                                    <div className="overflow-x-auto">
-                                        <table className="min-w-full divide-y divide-gray-200">
-                                            <thead className="bg-gray-50">
-                                                <tr>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Branch</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="bg-white divide-y divide-gray-200">
-                                                {filteredStudents.map((student) => (
-                                                    <tr key={student._id}>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="text-sm font-medium text-gray-900">{student.name}</div>
-                                                            <div className="text-sm text-gray-500">{student.email}</div>
-                                                        </td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.studentId}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.branch}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.year}</td>
-                                                        <td className="px-6 py-4 whitespace-nowrap">
-                                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${student.isApproved && student.isActive
-                                                                ? 'bg-green-100 text-green-800'
-                                                                : !student.isApproved
-                                                                    ? 'bg-yellow-100 text-yellow-800'
-                                                                    : 'bg-red-100 text-red-800'
-                                                                }`}>
-                                                                {student.isApproved && student.isActive ? 'Active' : !student.isApproved ? 'Pending' : 'Inactive'}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'pending' && (
-                        <div className="bg-white rounded-lg shadow-md">
-                            <div className="p-6 border-b border-gray-200">
-                                <h3 className="text-lg font-semibold text-gray-900">Pending Student Approvals</h3>
-                            </div>
-                            <div className="p-6">
-                                {dashboardData.pendingStudents.length === 0 ? (
-                                    <p className="text-gray-600 text-center py-8">No pending approvals</p>
-                                ) : (
-                                    <div className="space-y-4">
-                                        {dashboardData.pendingStudents.map((student) => (
-                                            <div key={student._id} className="border border-gray-200 rounded-lg p-6">
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex-1">
-                                                        <h4 className="text-lg font-medium text-gray-900">{student.name}</h4>
-                                                        <div className="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
-                                                            <div>
-                                                                <strong>Student ID:</strong> {student.studentId}
-                                                            </div>
-                                                            <div>
-                                                                <strong>Email:</strong> {student.email}
-                                                            </div>
-                                                            <div>
-                                                                <strong>Phone:</strong> {student.phone}
-                                                            </div>
-                                                            <div>
-                                                                <strong>Branch:</strong> {student.branch}
-                                                            </div>
-                                                            <div>
-                                                                <strong>Year:</strong> {student.year}
-                                                            </div>
-                                                            <div>
-                                                                <strong>Registered:</strong> {formatDate(student.createdAt)}
-                                                            </div>
+                                {/* Overview Content */}
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    {/* Recent Books */}
+                                    <div className="bg-white rounded-lg shadow-md">
+                                        <div className="p-6 border-b border-gray-200">
+                                            <h3 className="text-lg font-semibold text-gray-900">Recent Books</h3>
+                                        </div>
+                                        <div className="p-6">
+                                            <div className="space-y-4">
+                                                {dashboardData.books.slice(0, 5).map((book) => (
+                                                    <div key={book._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                        <div className="flex-1">
+                                                            <p className="font-medium text-gray-900">{book.title}</p>
+                                                            <p className="text-sm text-gray-600">{book.author?.join(', ')}</p>
+                                                            <p className="text-sm text-gray-500">Available: {book.availableCopies}/{book.totalCopies}</p>
                                                         </div>
+                                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${book.availableCopies > 0
+                                                            ? 'bg-green-100 text-green-800'
+                                                            : 'bg-red-100 text-red-800'
+                                                            }`}>
+                                                            {book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
+                                                        </span>
                                                     </div>
-                                                    <div className="flex space-x-3 ml-6">
-                                                        <button
-                                                            onClick={() => handleApproveStudent(student._id)}
-                                                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200 flex items-center space-x-2"
-                                                        >
-                                                            <CheckCircle className="h-4 w-4" />
-                                                            <span>Approve</span>
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleRejectStudent(student._id)}
-                                                            className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200 flex items-center space-x-2"
-                                                        >
-                                                            <XCircle className="h-4 w-4" />
-                                                            <span>Reject</span>
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                                ))}
                                             </div>
-                                        ))}
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
 
-                    {/* Add Book Modal */}
-                    {showAddBookForm && (
-                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                            <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-medium text-gray-900">Add New Book</h3>
-                                    <button
-                                        onClick={() => setShowAddBookForm(false)}
-                                        className="text-gray-400 hover:text-gray-600"
-                                    >
-                                        <XCircle className="h-6 w-6" />
-                                    </button>
+                                    {/* Recent Transactions */}
+                                    <div className="bg-white rounded-lg shadow-md">
+                                        <div className="p-6 border-b border-gray-200">
+                                            <h3 className="text-lg font-semibold text-gray-900">Recent Transactions</h3>
+                                        </div>
+                                        <div className="p-6">
+                                            <div className="space-y-4">
+                                                {dashboardData.transactions.slice(0, 5).map((transaction) => (
+                                                    <div key={transaction._id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                                        <div className="flex-1">
+                                                            <p className="font-medium text-gray-900">{transaction.bookId?.title}</p>
+                                                            <p className="text-sm text-gray-600">{transaction.studentId?.name}</p>
+                                                            <p className="text-sm text-gray-500">Due: {formatDate(transaction.dueDate)}</p>
+                                                        </div>
+                                                        <span className={`px-2 py-1 text-xs font-medium rounded-full ${transaction.status === 'issued' && isOverdue(transaction.dueDate)
+                                                            ? 'bg-red-100 text-red-800'
+                                                            : transaction.status === 'issued'
+                                                                ? 'bg-blue-100 text-blue-800'
+                                                                : 'bg-green-100 text-green-800'
+                                                            }`}>
+                                                            {transaction.status === 'issued' && isOverdue(transaction.dueDate)
+                                                                ? 'Overdue'
+                                                                : transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <form onSubmit={handleAddBook} className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Title</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={newBook.title}
-                                                onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">ISBN (Optional)</label>
-                                            <input
-                                                type="text"
-                                                value={newBook.isbn || ''}
-                                                onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
-                                                placeholder="10 or 13 digit ISBN"
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Author(s) (comma separated)</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={newBook.author}
-                                                onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Category</label>
-                                            <select
-                                                required
-                                                value={newBook.category}
-                                                onChange={(e) => setNewBook({ ...newBook, category: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            </>
+                        )}
+
+                        {activeTab === 'books' && (
+                            <div className="bg-white rounded-lg shadow-md">
+                                <div className="p-6 border-b border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-lg font-semibold text-gray-900">Book Management</h3>
+                                        <div className="flex space-x-4">
+                                            <div className="relative">
+                                                <Search className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Search books..."
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                />
+                                            </div>
+                                            <button
+                                                onClick={() => setShowAddBookForm(true)}
+                                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
                                             >
-                                                <option value="">Select a category</option>
-                                                <option value="Electronics">Electronics</option>
-                                                <option value="Power Systems">Power Systems</option>
-                                                <option value="Control Systems">Control Systems</option>
-                                                <option value="Electrical Machines">Electrical Machines</option>
-                                                <option value="Power Electronics">Power Electronics</option>
-                                                <option value="Renewable Energy">Renewable Energy</option>
-                                                <option value="Circuit Analysis">Circuit Analysis</option>
-                                                <option value="Digital Electronics">Digital Electronics</option>
-                                                <option value="Analog Electronics">Analog Electronics</option>
-                                                <option value="Microprocessors">Microprocessors</option>
-                                                <option value="Signal Processing">Signal Processing</option>
-                                                <option value="Communication Systems">Communication Systems</option>
-                                                <option value="Electromagnetic Theory">Electromagnetic Theory</option>
-                                                <option value="General Engineering">General Engineering</option>
-                                                <option value="Mathematics">Mathematics</option>
-                                                <option value="Physics">Physics</option>
-                                                <option value="Research Papers">Research Papers</option>
-                                                <option value="Journals">Journals</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Subject</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={newBook.subject}
-                                                onChange={(e) => setNewBook({ ...newBook, subject: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Publisher</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={newBook.publisher}
-                                                onChange={(e) => setNewBook({ ...newBook, publisher: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Published Year</label>
-                                            <input
-                                                type="number"
-                                                required
-                                                value={newBook.publishedYear}
-                                                onChange={(e) => setNewBook({ ...newBook, publishedYear: parseInt(e.target.value) })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Total Copies</label>
-                                            <input
-                                                type="number"
-                                                required
-                                                min="1"
-                                                value={newBook.totalCopies}
-                                                onChange={(e) => setNewBook({ ...newBook, totalCopies: parseInt(e.target.value) })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
+                                                <Plus className="h-4 w-4" />
+                                                <span>Add Book</span>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea
-                                            value={newBook.description}
-                                            onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
-                                            rows="3"
-                                            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                    <div className="flex justify-end space-x-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowAddBookForm(false)}
-                                            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                        >
-                                            Add Book
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Issue Book Modal */}
-                    {showIssueBookForm && (
-                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                            <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-md bg-white">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-medium text-gray-900">Issue Book</h3>
-                                    <button
-                                        onClick={() => setShowIssueBookForm(false)}
-                                        className="text-gray-400 hover:text-gray-600"
-                                    >
-                                        <XCircle className="h-6 w-6" />
-                                    </button>
                                 </div>
-                                <form onSubmit={handleIssueBook} className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Select Book</label>
-                                        <select
-                                            required
-                                            value={issueBookData.bookId}
-                                            onChange={(e) => setIssueBookData({ ...issueBookData, bookId: e.target.value })}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        >
-                                            <option value="">Select a book</option>
-                                            {dashboardData.books.filter(book => book.availableCopies > 0).map(book => (
-                                                <option key={book._id} value={book._id}>
-                                                    {book.title} (Available: {book.availableCopies})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Select Student</label>
-                                        <select
-                                            required
-                                            value={issueBookData.studentId}
-                                            onChange={(e) => setIssueBookData({ ...issueBookData, studentId: e.target.value })}
-                                            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        >
-                                            <option value="">Select a student</option>
-                                            {dashboardData.students.filter(student => student.isApproved && student.isActive).map(student => (
-                                                <option key={student._id} value={student._id}>
-                                                    {student.name} ({student.studentId})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Notes (Optional)</label>
-                                        <textarea
-                                            value={issueBookData.notes}
-                                            onChange={(e) => setIssueBookData({ ...issueBookData, notes: e.target.value })}
-                                            placeholder="Any additional notes about this book issue..."
-                                            rows="3"
-                                            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                        <p className="mt-1 text-sm text-gray-500">Due date will be automatically set to 14 days from today</p>
-                                    </div>
-                                    <div className="flex justify-end space-x-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowIssueBookForm(false)}
-                                            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                                        >
-                                            Issue Book
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Book Details Modal */}
-                    {selectedBook && (
-                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                            <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-lg shadow-lg rounded-md bg-white">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-medium text-gray-900">Book Details</h3>
-                                    <button
-                                        onClick={() => setSelectedBook(null)}
-                                        className="text-gray-400 hover:text-gray-600"
-                                    >
-                                        <XCircle className="h-6 w-6" />
-                                    </button>
-                                </div>
-                                <div className="space-y-4">
-                                    <div>
-                                        <h4 className="text-xl font-semibold text-gray-900">{selectedBook.title}</h4>
-                                        <p className="text-gray-600">by {selectedBook.author?.join(', ')}</p>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                            <strong>Category:</strong> {selectedBook.category}
-                                        </div>
-                                        <div>
-                                            <strong>Subject:</strong> {selectedBook.subject}
-                                        </div>
-                                        <div>
-                                            <strong>Publisher:</strong> {selectedBook.publisher}
-                                        </div>
-                                        <div>
-                                            <strong>Published:</strong> {selectedBook.publishedYear}
-                                        </div>
-                                        <div>
-                                            <strong>Total Copies:</strong> {selectedBook.totalCopies}
-                                        </div>
-                                        <div>
-                                            <strong>Available:</strong> {selectedBook.availableCopies}
-                                        </div>
-                                        <div>
-                                            <strong>ISBN:</strong> {selectedBook.isbn || 'N/A'}
-                                        </div>
-                                    </div>
-                                    {selectedBook.description && (
-                                        <div>
-                                            <strong>Description:</strong>
-                                            <p className="mt-1 text-gray-600">{selectedBook.description}</p>
+                                <div className="p-6">
+                                    {filteredBooks.length === 0 ? (
+                                        <p className="text-gray-600 text-center py-8">No books found</p>
+                                    ) : (
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copies</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {filteredBooks.map((book) => (
+                                                        <tr key={book._id}>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <div>
+                                                                    <div className="text-sm font-medium text-gray-900">{book.title}</div>
+                                                                    <div className="text-sm text-gray-500">{book.author?.join(', ')}</div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{book.category}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                {book.availableCopies}/{book.totalCopies}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${book.availableCopies > 0
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : 'bg-red-100 text-red-800'
+                                                                    }`}>
+                                                                    {book.availableCopies > 0 ? 'Available' : 'Out of Stock'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                                <div className="flex space-x-2">
+                                                                    <button
+                                                                        onClick={() => setSelectedBook(book)}
+                                                                        className="text-blue-600 hover:text-blue-900"
+                                                                    >
+                                                                        <Eye className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => setEditingBook(book)}
+                                                                        className="text-green-600 hover:text-green-900"
+                                                                    >
+                                                                        <Edit className="h-4 w-4" />
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() => handleDeleteBook(book._id)}
+                                                                        className="text-red-600 hover:text-red-900"
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {/* Edit Book Modal */}
-                    {editingBook && (
-                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-                            <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-lg font-medium text-gray-900">Edit Book</h3>
-                                    <button
-                                        onClick={() => setEditingBook(null)}
-                                        className="text-gray-400 hover:text-gray-600"
-                                    >
-                                        <XCircle className="h-6 w-6" />
-                                    </button>
+                        {activeTab === 'transactions' && (
+                            <div className="bg-white rounded-lg shadow-md">
+                                <div className="p-6 border-b border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-lg font-semibold text-gray-900">Book Transactions</h3>
+                                        <button
+                                            onClick={() => setShowIssueBookForm(true)}
+                                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2"
+                                        >
+                                            <Send className="h-4 w-4" />
+                                            <span>Issue Book</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <form onSubmit={handleEditBook} className="space-y-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Title</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={editingBook.title}
-                                                onChange={(e) => setEditingBook({ ...editingBook, title: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
+                                <div className="p-6">
+                                    {dashboardData.transactions.length === 0 ? (
+                                        <p className="text-gray-600 text-center py-8">No transactions found</p>
+                                    ) : (
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Date</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {dashboardData.transactions.map((transaction) => (
+                                                        <tr key={transaction._id}>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <div className="text-sm font-medium text-gray-900">{transaction.bookId?.title}</div>
+                                                                <div className="text-sm text-gray-500">{transaction.bookId?.author?.join(', ')}</div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <div className="text-sm font-medium text-gray-900">{transaction.studentId?.name}</div>
+                                                                <div className="text-sm text-gray-500">{transaction.studentId?.studentId}</div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                {formatDate(transaction.issueDate)}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                {formatDate(transaction.dueDate)}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${transaction.status === 'issued' && isOverdue(transaction.dueDate)
+                                                                    ? 'bg-red-100 text-red-800'
+                                                                    : transaction.status === 'issued'
+                                                                        ? 'bg-blue-100 text-blue-800'
+                                                                        : 'bg-green-100 text-green-800'
+                                                                    }`}>
+                                                                    {transaction.status === 'issued' && isOverdue(transaction.dueDate)
+                                                                        ? 'Overdue'
+                                                                        : transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                {transaction.status === 'issued' && (
+                                                                    <button
+                                                                        onClick={() => handleCollectBook(transaction._id)}
+                                                                        className="bg-orange-600 text-white px-3 py-1 rounded-md hover:bg-orange-700 transition-colors text-xs"
+                                                                        title="Collect book from student"
+                                                                    >
+                                                                        Collect Book
+                                                                    </button>
+                                                                )}
+                                                                {transaction.status === 'returned' && (
+                                                                    <span className="text-green-600 text-xs">Completed</span>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Author(s) (comma separated)</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={Array.isArray(editingBook.author) ? editingBook.author.join(', ') : editingBook.author}
-                                                onChange={(e) => setEditingBook({ ...editingBook, author: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Category</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={editingBook.category}
-                                                onChange={(e) => setEditingBook({ ...editingBook, category: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Subject</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={editingBook.subject}
-                                                onChange={(e) => setEditingBook({ ...editingBook, subject: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Publisher</label>
-                                            <input
-                                                type="text"
-                                                required
-                                                value={editingBook.publisher}
-                                                onChange={(e) => setEditingBook({ ...editingBook, publisher: e.target.value })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Published Year</label>
-                                            <input
-                                                type="number"
-                                                required
-                                                value={editingBook.publishedYear}
-                                                onChange={(e) => setEditingBook({ ...editingBook, publishedYear: parseInt(e.target.value) })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Total Copies</label>
-                                            <input
-                                                type="number"
-                                                required
-                                                min="1"
-                                                value={editingBook.totalCopies}
-                                                onChange={(e) => setEditingBook({ ...editingBook, totalCopies: parseInt(e.target.value) })}
-                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Description</label>
-                                        <textarea
-                                            value={editingBook.description || ''}
-                                            onChange={(e) => setEditingBook({ ...editingBook, description: e.target.value })}
-                                            rows="3"
-                                            className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                    <div className="flex justify-end space-x-3 pt-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setEditingBook(null)}
-                                            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                                        >
-                                            Update Book
-                                        </button>
-                                    </div>
-                                </form>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </main>
+                        )}
+
+                        {activeTab === 'students' && (
+                            <div className="bg-white rounded-lg shadow-md">
+                                <div className="p-6 border-b border-gray-200">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-lg font-semibold text-gray-900">Student Management</h3>
+                                        <div className="relative">
+                                            <Search className="h-5 w-5 absolute left-3 top-3 text-gray-400" />
+                                            <input
+                                                type="text"
+                                                placeholder="Search students..."
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    {filteredStudents.length === 0 ? (
+                                        <p className="text-gray-600 text-center py-8">No students found</p>
+                                    ) : (
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student ID</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {filteredStudents.map((student) => (
+                                                        <tr key={student._id}>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                                                                <div className="text-sm text-gray-500">{student.email}</div>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.studentId}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{student.year}</td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${student.isApproved && student.isActive
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : !student.isApproved
+                                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                                        : 'bg-red-100 text-red-800'
+                                                                    }`}>
+                                                                    {student.isApproved && student.isActive ? 'Active' : !student.isApproved ? 'Pending' : 'Inactive'}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'pending' && (
+                            <div className="bg-white rounded-lg shadow-md">
+                                <div className="p-6 border-b border-gray-200">
+                                    <h3 className="text-lg font-semibold text-gray-900">Pending Student Approvals</h3>
+                                </div>
+                                <div className="p-6">
+                                    {dashboardData.pendingStudents.length === 0 ? (
+                                        <p className="text-gray-600 text-center py-8">No pending approvals</p>
+                                    ) : (
+                                        <div className="space-y-4">
+                                            {dashboardData.pendingStudents.map((student) => (
+                                                <div key={student._id} className="border border-gray-200 rounded-lg p-6">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex-1">
+                                                            <h4 className="text-lg font-medium text-gray-900">{student.name}</h4>
+                                                            <div className="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                                                                <div>
+                                                                    <strong>Student ID:</strong> {student.studentId}
+                                                                </div>
+                                                                <div>
+                                                                    <strong>Email:</strong> {student.email}
+                                                                </div>
+                                                                <div>
+                                                                    <strong>Phone:</strong> {student.phone}
+                                                                </div>
+                                                                <div>
+                                                                    <strong>Year:</strong> {student.year}
+                                                                </div>
+                                                                <div>
+                                                                    <strong>Registered:</strong> {formatDate(student.createdAt)}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex space-x-3 ml-6">
+                                                            <button
+                                                                onClick={() => handleApproveStudent(student._id)}
+                                                                className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200 flex items-center space-x-2"
+                                                            >
+                                                                <CheckCircle className="h-4 w-4" />
+                                                                <span>Approve</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleRejectStudent(student._id)}
+                                                                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-200 flex items-center space-x-2"
+                                                            >
+                                                                <XCircle className="h-4 w-4" />
+                                                                <span>Reject</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Add Book Modal */}
+                        {showAddBookForm && (
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                                <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-medium text-gray-900">Add New Book</h3>
+                                        <button
+                                            onClick={() => setShowAddBookForm(false)}
+                                            className="text-gray-400 hover:text-gray-600"
+                                        >
+                                            <XCircle className="h-6 w-6" />
+                                        </button>
+                                    </div>
+                                    <form onSubmit={handleAddBook} className="space-y-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Title</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newBook.title}
+                                                    onChange={(e) => setNewBook({ ...newBook, title: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">ISBN (Optional)</label>
+                                                <input
+                                                    type="text"
+                                                    value={newBook.isbn || ''}
+                                                    onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+                                                    placeholder="10 or 13 digit ISBN"
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Author(s) (comma separated)</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newBook.author}
+                                                    onChange={(e) => setNewBook({ ...newBook, author: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Category</label>
+                                                <select
+                                                    required
+                                                    value={newBook.category}
+                                                    onChange={(e) => setNewBook({ ...newBook, category: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                >
+                                                    <option value="">Select a category</option>
+                                                    <option value="Electronics">Electronics</option>
+                                                    <option value="Power Systems">Power Systems</option>
+                                                    <option value="Control Systems">Control Systems</option>
+                                                    <option value="Electrical Machines">Electrical Machines</option>
+                                                    <option value="Power Electronics">Power Electronics</option>
+                                                    <option value="Renewable Energy">Renewable Energy</option>
+                                                    <option value="Circuit Analysis">Circuit Analysis</option>
+                                                    <option value="Digital Electronics">Digital Electronics</option>
+                                                    <option value="Analog Electronics">Analog Electronics</option>
+                                                    <option value="Microprocessors">Microprocessors</option>
+                                                    <option value="Signal Processing">Signal Processing</option>
+                                                    <option value="Communication Systems">Communication Systems</option>
+                                                    <option value="Electromagnetic Theory">Electromagnetic Theory</option>
+                                                    <option value="General Engineering">General Engineering</option>
+                                                    <option value="Mathematics">Mathematics</option>
+                                                    <option value="Physics">Physics</option>
+                                                    <option value="Research Papers">Research Papers</option>
+                                                    <option value="Journals">Journals</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Subject</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newBook.subject}
+                                                    onChange={(e) => setNewBook({ ...newBook, subject: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Publisher</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={newBook.publisher}
+                                                    onChange={(e) => setNewBook({ ...newBook, publisher: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Published Year</label>
+                                                <input
+                                                    type="number"
+                                                    required
+                                                    value={newBook.publishedYear}
+                                                    onChange={(e) => setNewBook({ ...newBook, publishedYear: parseInt(e.target.value) })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Total Copies</label>
+                                                <input
+                                                    type="number"
+                                                    required
+                                                    min="1"
+                                                    value={newBook.totalCopies}
+                                                    onChange={(e) => setNewBook({ ...newBook, totalCopies: parseInt(e.target.value) })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Description</label>
+                                            <textarea
+                                                value={newBook.description}
+                                                onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
+                                                rows="3"
+                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            />
+                                        </div>
+                                        <div className="flex justify-end space-x-3 pt-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowAddBookForm(false)}
+                                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                            >
+                                                Add Book
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Issue Book Modal */}
+                        {showIssueBookForm && (
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                                <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-md shadow-lg rounded-md bg-white">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-medium text-gray-900">Issue Book</h3>
+                                        <button
+                                            onClick={() => setShowIssueBookForm(false)}
+                                            className="text-gray-400 hover:text-gray-600"
+                                        >
+                                            <XCircle className="h-6 w-6" />
+                                        </button>
+                                    </div>
+                                    <form onSubmit={handleIssueBook} className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Select Book</label>
+                                            <select
+                                                required
+                                                value={issueBookData.bookId}
+                                                onChange={(e) => setIssueBookData({ ...issueBookData, bookId: e.target.value })}
+                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            >
+                                                <option value="">Select a book</option>
+                                                {dashboardData.books.filter(book => book.availableCopies > 0).map(book => (
+                                                    <option key={book._id} value={book._id}>
+                                                        {book.title} (Available: {book.availableCopies})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Select Student</label>
+                                            <select
+                                                required
+                                                value={issueBookData.studentId}
+                                                onChange={(e) => setIssueBookData({ ...issueBookData, studentId: e.target.value })}
+                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            >
+                                                <option value="">Select a student</option>
+                                                {dashboardData.students.filter(student => student.isApproved && student.isActive).map(student => (
+                                                    <option key={student._id} value={student._id}>
+                                                        {student.name} ({student.studentId})
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Notes (Optional)</label>
+                                            <textarea
+                                                value={issueBookData.notes}
+                                                onChange={(e) => setIssueBookData({ ...issueBookData, notes: e.target.value })}
+                                                placeholder="Any additional notes about this book issue..."
+                                                rows="3"
+                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            />
+                                            <p className="mt-1 text-sm text-gray-500">Due date will be automatically set to 14 days from today</p>
+                                        </div>
+                                        <div className="flex justify-end space-x-3 pt-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowIssueBookForm(false)}
+                                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                                            >
+                                                Issue Book
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Book Details Modal */}
+                        {selectedBook && (
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                                <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-lg shadow-lg rounded-md bg-white">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-medium text-gray-900">Book Details</h3>
+                                        <button
+                                            onClick={() => setSelectedBook(null)}
+                                            className="text-gray-400 hover:text-gray-600"
+                                        >
+                                            <XCircle className="h-6 w-6" />
+                                        </button>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h4 className="text-xl font-semibold text-gray-900">{selectedBook.title}</h4>
+                                            <p className="text-gray-600">by {selectedBook.author?.join(', ')}</p>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4 text-sm">
+                                            <div>
+                                                <strong>Category:</strong> {selectedBook.category}
+                                            </div>
+                                            <div>
+                                                <strong>Subject:</strong> {selectedBook.subject}
+                                            </div>
+                                            <div>
+                                                <strong>Publisher:</strong> {selectedBook.publisher}
+                                            </div>
+                                            <div>
+                                                <strong>Published:</strong> {selectedBook.publishedYear}
+                                            </div>
+                                            <div>
+                                                <strong>Total Copies:</strong> {selectedBook.totalCopies}
+                                            </div>
+                                            <div>
+                                                <strong>Available:</strong> {selectedBook.availableCopies}
+                                            </div>
+                                            <div>
+                                                <strong>ISBN:</strong> {selectedBook.isbn || 'N/A'}
+                                            </div>
+                                        </div>
+                                        {selectedBook.description && (
+                                            <div>
+                                                <strong>Description:</strong>
+                                                <p className="mt-1 text-gray-600">{selectedBook.description}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Edit Book Modal */}
+                        {editingBook && (
+                            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+                                <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-2xl shadow-lg rounded-md bg-white">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-lg font-medium text-gray-900">Edit Book</h3>
+                                        <button
+                                            onClick={() => setEditingBook(null)}
+                                            className="text-gray-400 hover:text-gray-600"
+                                        >
+                                            <XCircle className="h-6 w-6" />
+                                        </button>
+                                    </div>
+                                    <form onSubmit={handleEditBook} className="space-y-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Title</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={editingBook.title}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, title: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Author(s) (comma separated)</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={Array.isArray(editingBook.author) ? editingBook.author.join(', ') : editingBook.author}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, author: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Category</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={editingBook.category}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, category: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Subject</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={editingBook.subject}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, subject: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Publisher</label>
+                                                <input
+                                                    type="text"
+                                                    required
+                                                    value={editingBook.publisher}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, publisher: e.target.value })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Published Year</label>
+                                                <input
+                                                    type="number"
+                                                    required
+                                                    value={editingBook.publishedYear}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, publishedYear: parseInt(e.target.value) })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700">Total Copies</label>
+                                                <input
+                                                    type="number"
+                                                    required
+                                                    min="1"
+                                                    value={editingBook.totalCopies}
+                                                    onChange={(e) => setEditingBook({ ...editingBook, totalCopies: parseInt(e.target.value) })}
+                                                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Description</label>
+                                            <textarea
+                                                value={editingBook.description || ''}
+                                                onChange={(e) => setEditingBook({ ...editingBook, description: e.target.value })}
+                                                rows="3"
+                                                className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                            />
+                                        </div>
+                                        <div className="flex justify-end space-x-3 pt-4">
+                                            <button
+                                                type="button"
+                                                onClick={() => setEditingBook(null)}
+                                                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                                            >
+                                                Update Book
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+                    </main>
                 </div>
             </div>
         </div>

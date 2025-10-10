@@ -47,22 +47,6 @@ const userSchema = new mongoose.Schema({
         min: [1, 'Year must be between 1 and 4'],
         max: [4, 'Year must be between 1 and 4']
     },
-    branch: {
-        type: String,
-        required: function () {
-            return this.role === 'student';
-        },
-        enum: [
-            'Power Systems',
-            'Electronics & Communication',
-            'Control Systems',
-            'Electrical Machines',
-            'Power Electronics',
-            'Renewable Energy',
-            'General'
-        ],
-        default: 'General'
-    },
     isApproved: {
         type: Boolean,
         default: false

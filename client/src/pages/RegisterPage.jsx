@@ -390,154 +390,133 @@ const RegisterPage = () => {
                                             <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.confirmPassword}</p>
                                         )}
                                     </div>
-
-                            {/* Academic Information */}
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white border-b dark:border-gray-700 pb-2">
-                                        Academic Information
-                                    </h3>
                                 </div>
 
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                {/* Academic Information */}
+                                <div className="space-y-6">
                                     <div>
-                                        <label htmlFor="year" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Year *
-                                        </label>
-                                        <div className="mt-1 relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <GraduationCap className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white border-b dark:border-gray-700 pb-2">
+                                            Academic Information
+                                        </h3>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div>
+                                            <label htmlFor="year" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Year *
+                                            </label>
+                                            <div className="mt-1 relative">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <GraduationCap className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                                </div>
+                                                <select
+                                                    id="year"
+                                                    name="year"
+                                                    required
+                                                    value={formData.year}
+                                                    onChange={handleChange}
+                                                    className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${formErrors.year ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
+                                                        }`}
+                                                >
+                                                    <option value="">Select Year</option>
+                                                    <option value="1">1st Year</option>
+                                                    <option value="2">2nd Year</option>
+                                                    <option value="3">3rd Year</option>
+                                                    <option value="4">4th Year</option>
+                                                </select>
                                             </div>
-                                            <select
-                                                id="year"
-                                                name="year"
-                                                required
-                                                value={formData.year}
-                                                onChange={handleChange}
-                                                className={`appearance-none block w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${formErrors.year ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
-                                                    }`}
-                                            >
-                                                <option value="">Select Year</option>
-                                                <option value="1">1st Year</option>
-                                                <option value="2">2nd Year</option>
-                                                <option value="3">3rd Year</option>
-                                                <option value="4">4th Year</option>
-                                            </select>
+                                            {formErrors.year && (
+                                                <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.year}</p>
+                                            )}
                                         </div>
-                                        {formErrors.year && (
-                                            <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.year}</p>
-                                        )}
+
+
                                     </div>
                                 </div>
 
+                                {/* Address (Optional) */}
                                 <div className="space-y-6">
                                     <div>
-                                        <label htmlFor="branch" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Specialization *
-                                        </label>
-                                        <div className="mt-1">
-                                            <select
-                                                id="branch"
-                                                name="branch"
-                                                required
-                                                value={formData.branch}
-                                                onChange={handleChange}
-                                                className={`appearance-none block w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${formErrors.branch ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-600'
-                                                    }`}
-                                            >
-                                                <option value="">Select Specialization</option>
-                                                {branches.map((branch) => (
-                                                    <option key={branch} value={branch}>
-                                                        {branch}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                        <h3 className="text-lg font-medium text-gray-900 dark:text-white border-b dark:border-gray-700 pb-2">
+                                            Address (Optional)
+                                        </h3>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                        <div className="sm:col-span-2">
+                                            <label htmlFor="address.street" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                Street Address
+                                            </label>
+                                            <div className="mt-1 relative">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <MapPin className="h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                                </div>
+                                                <input
+                                                    id="address.street"
+                                                    name="address.street"
+                                                    type="text"
+                                                    value={formData.address.street}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                    placeholder="Enter street address"
+                                                />
+                                            </div>
                                         </div>
-                                        {formErrors.branch && (
-                                            <p className="mt-2 text-sm text-red-600 dark:text-red-400">{formErrors.branch}</p>
-                                        )}
+
+                                        <div>
+                                            <label htmlFor="address.city" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                City
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.city"
+                                                    name="address.city"
+                                                    type="text"
+                                                    value={formData.address.city}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                    placeholder="Enter city"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label htmlFor="address.state" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                State
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.state"
+                                                    name="address.state"
+                                                    type="text"
+                                                    value={formData.address.state}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                    placeholder="Enter state"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label htmlFor="address.pincode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                                PIN Code
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    id="address.pincode"
+                                                    name="address.pincode"
+                                                    type="text"
+                                                    maxLength="6"
+                                                    value={formData.address.pincode}
+                                                    onChange={handleChange}
+                                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                                    placeholder="Enter PIN code"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Address (Optional) */}
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-medium text-gray-900 dark:text-white border-b dark:border-gray-700 pb-2">
-                                        Address (Optional)
-                                    </h3>
-                                </div>
-
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                                    <div className="sm:col-span-2">
-                                        <label htmlFor="address.street" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            Street Address
-                                        </label>
-                                        <div className="mt-1 relative">
-                                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <MapPin className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-                                            </div>
-                                            <input
-                                                id="address.street"
-                                                name="address.street"
-                                                type="text"
-                                                value={formData.address.street}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                placeholder="Enter street address"
-                                            />
-                                        </div>
-
-                                    <div>
-                                        <label htmlFor="address.city" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            City
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.city"
-                                                name="address.city"
-                                                type="text"
-                                                value={formData.address.city}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                placeholder="Enter city"
-                                            />
-                                        </div>
-
-                                    <div>
-                                        <label htmlFor="address.state" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            State
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.state"
-                                                name="address.state"
-                                                type="text"
-                                                value={formData.address.state}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                placeholder="Enter state"
-                                            />
-                                        </div>
-
-                                    <div>
-                                        <label htmlFor="address.pincode" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                            PIN Code
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
-                                                id="address.pincode"
-                                                name="address.pincode"
-                                                type="text"
-                                                maxLength="6"
-                                                value={formData.address.pincode}
-                                                onChange={handleChange}
-                                                className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                                placeholder="Enter PIN code"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
 
                             <div>
                                 <button

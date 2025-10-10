@@ -28,7 +28,6 @@ router.post('/register', async (req, res) => {
             password,
             phone,
             year,
-            branch,
             address
         } = req.body;
 
@@ -67,7 +66,6 @@ router.post('/register', async (req, res) => {
             password,
             phone,
             year,
-            branch,
             address,
             role: 'student',
             emailVerificationToken: crypto.randomBytes(32).toString('hex')
@@ -320,15 +318,15 @@ router.post('/change-password', authenticate, async (req, res) => {
 // forgot password and reset password :
 router.post('/forgot-password', async (req, res) => {
     try {
-        const {email} = req.body;
-        const user = await User.findOne({email: email.toLowerCase()});
-        if (!user){
+        const { email } = req.body;
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) {
             return res.status(404).json({
                 success: false,
                 message: 'User with this email does not exist'
             });
         }
-        
+
         // Generate reset token
         const resetToken = crypto.randomBytes(32).toString('hex');
         user.passwordResetToken = resetToken;
@@ -340,7 +338,7 @@ router.post('/forgot-password', async (req, res) => {
         emailService.sendPasswordResetEmail(user.email, user.name, resetUrl);
 
 
-        
+
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -351,14 +349,14 @@ router.post('/forgot-password', async (req, res) => {
 });
 router.post('/reset-password/:token', async (req, res) => {
     try {
-        const {token} = req.params;
-        const {newPassword} = req.body;
+        const { token } = req.params;
+        const { newPassword } = req.body;
 
         const user = await User.findOne({
             passwordResetToken: token,
-            passwordResetExpires: {$gt: Date.now()}
+            passwordResetExpires: { $gt: Date.now() }
         });
-        if (!user){
+        if (!user) {
             return res.status(400).json({
                 success: false,
                 message: 'Invalid or expired password reset token'
@@ -370,7 +368,7 @@ router.post('/reset-password/:token', async (req, res) => {
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
         await user.save();
-        
+
         res.json({
             success: true,
             message: 'Password has been reset successfully'

@@ -110,10 +110,7 @@ const StudentDashboard = () => {
             <div className="w-64 bg-white shadow-lg">
                 <div className="flex flex-col h-full">
                     {/* Sidebar Header */}
-                    <div className="flex items-center justify-center h-16 px-4 bg-green-600">
-                        <BookOpen className="h-8 w-8 text-white mr-2" />
-                        <h1 className="text-xl font-bold text-white">LibraryMS</h1>
-                    </div>
+
 
                     {/* User Info */}
                     <div className="p-4 border-b border-gray-200">

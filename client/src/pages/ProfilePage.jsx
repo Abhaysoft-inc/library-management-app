@@ -6,14 +6,25 @@ const ProfilePage = () => {
     const { user } = useSelector((state) => state.auth);
     const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    // Helper function to format address object to string
+    const formatAddress = (addressObj) => {
+        if (!addressObj || typeof addressObj === 'string') return addressObj || '';
+        const parts = [
+            addressObj.street,
+            addressObj.city,
+            addressObj.state,
+            addressObj.pincode
+        ].filter(part => part && part.trim() !== '');
+        return parts.join(', ');
+    };
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
         phone: user?.phone || '',
-        address: user?.address || '',
+        address: formatAddress(user?.address),
         dateOfBirth: user?.dateOfBirth || '',
         rollNumber: user?.rollNumber || '',
-        branch: user?.branch || '',
         year: user?.year || '',
         password: '',
         confirmPassword: ''
@@ -48,10 +59,9 @@ const ProfilePage = () => {
             name: user?.name || '',
             email: user?.email || '',
             phone: user?.phone || '',
-            address: user?.address || '',
+            address: formatAddress(user?.address),
             dateOfBirth: user?.dateOfBirth || '',
             rollNumber: user?.rollNumber || '',
-            branch: user?.branch || '',
             year: user?.year || '',
             password: '',
             confirmPassword: ''
@@ -240,28 +250,7 @@ const ProfilePage = () => {
                                         </div>
                                     </div>
 
-                                    {/* Branch */}
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Branch</label>
-                                        {isEditing ? (
-                                            <select
-                                                name="branch"
-                                                value={formData.branch}
-                                                onChange={handleInputChange}
-                                                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                            >
-                                                <option value="">Select Branch</option>
-                                                <option value="Computer Science">Computer Science</option>
-                                                <option value="Electrical Engineering">Electrical Engineering</option>
-                                                <option value="Mechanical Engineering">Mechanical Engineering</option>
-                                                <option value="Civil Engineering">Civil Engineering</option>
-                                            </select>
-                                        ) : (
-                                            <div className="py-2">
-                                                <span className="text-gray-900 dark:text-white">{formData.branch || 'Not provided'}</span>
-                                            </div>
-                                        )}
-                                    </div>
+
 
                                     {/* Address */}
                                     <div className="md:col-span-2">

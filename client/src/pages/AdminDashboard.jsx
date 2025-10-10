@@ -95,7 +95,6 @@ const AdminDashboard = () => {
                         name: s.name,
                         rollNumber: s.studentId,
                         email: s.email,
-                        branch: s.branch,
                         registrationDate: s.createdAt
                     }));
 
@@ -126,7 +125,6 @@ const AdminDashboard = () => {
                     name: 'John Doe',
                     rollNumber: '24305',
                     email: 'john@example.com',
-                    branch: 'Computer Science',
                     registrationDate: '2024-10-01'
                 },
                 {
@@ -134,7 +132,6 @@ const AdminDashboard = () => {
                     name: 'Jane Smith',
                     rollNumber: '24306',
                     email: 'jane@example.com',
-                    branch: 'Electrical Engineering',
                     registrationDate: '2024-10-02'
                 }
             ]);
@@ -334,7 +331,7 @@ const AdminDashboard = () => {
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex-1">
                                                         <h4 className="font-medium text-gray-900">{user.name}</h4>
-                                                        <p className="text-sm text-gray-600">Roll: {user.rollNumber} • {user.branch}</p>
+                                                        <p className="text-sm text-gray-600">Roll: {user.rollNumber}</p>
                                                         <p className="text-xs text-gray-500">{user.email}</p>
                                                         <p className="text-xs text-gray-500">Registered: {new Date(user.registrationDate).toLocaleDateString()}</p>
                                                     </div>

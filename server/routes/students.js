@@ -16,7 +16,6 @@ router.get('/', authenticate, authorize('admin', 'librarian'), async (req, res) 
             limit = 10,
             search,
             year,
-            branch,
             isApproved,
             sortBy = 'name',
             sortOrder = 'asc'
@@ -36,11 +35,6 @@ router.get('/', authenticate, authorize('admin', 'librarian'), async (req, res) 
         // Filter by year
         if (year) {
             query.year = year;
-        }
-
-        // Filter by branch
-        if (branch && branch !== 'all') {
-            query.branch = branch;
         }
 
         // Filter by approval status
@@ -158,7 +152,6 @@ router.put('/:id', authenticate, async (req, res) => {
             name,
             phone,
             year,
-            branch,
             address
         } = req.body;
 
@@ -166,7 +159,6 @@ router.put('/:id', authenticate, async (req, res) => {
         if (name) student.name = name;
         if (phone) student.phone = phone;
         if (year) student.year = year;
-        if (branch) student.branch = branch;
         if (address) student.address = address;
 
         await student.save();
@@ -318,21 +310,13 @@ router.get('/stats/overview', authenticate, authorize('admin', 'librarian'), asy
             { $sort: { _id: 1 } }
         ]);
 
-        // Students by branch
-        const studentsByBranch = await User.aggregate([
-            { $match: { role: 'student', isApproved: true, isActive: true } },
-            { $group: { _id: '$branch', count: { $sum: 1 } } },
-            { $sort: { count: -1 } }
-        ]);
-
         res.json({
             success: true,
             data: {
                 totalStudents,
                 approvedStudents,
                 pendingStudents,
-                studentsByYear,
-                studentsByBranch
+                studentsByYear
             }
         });
 
