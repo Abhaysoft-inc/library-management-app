@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({
     isbn: {
         type: String,
-        unique: true,
+        unique: false,
         trim: true,
-        match: [/^(?:\d{9}[\dX]|\d{13})$/, 'ISBN must be 10 or 13 digits']
     },
     title: {
         type: String,

@@ -242,15 +242,15 @@ router.put('/:id', authenticate, authorize('librarian', 'admin'), async (req, re
         } = req.body;
 
         // Check if ISBN is being changed and if it conflicts
-        if (isbn && isbn !== book.isbn) {
-            const existingBook = await Book.findOne({ isbn, isActive: true, _id: { $ne: req.params.id } });
-            if (existingBook) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Book with this ISBN already exists'
-                });
-            }
-        }
+        // if (isbn && isbn !== book.isbn) {
+        //     const existingBook = await Book.findOne({ isbn, isActive: true, _id: { $ne: req.params.id } });
+        //     if (existingBook) {
+        //         return res.status(400).json({
+        //             success: false,
+        //             message: 'Book with this ISBN already exists'
+        //         });
+        //     }
+        // }
 
         // Update fields
         book.isbn = isbn || book.isbn;
