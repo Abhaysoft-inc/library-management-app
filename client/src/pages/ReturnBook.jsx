@@ -182,8 +182,8 @@ const ReturnBook = () => {
                                                     key={transaction._id}
                                                     onClick={() => setSelectedTransaction(transaction)}
                                                     className={`w-full p-4 rounded-xl border-2 transition-all text-left ${selectedTransaction?._id === transaction._id
-                                                            ? 'border-blue-500 bg-blue-50'
-                                                            : 'border-slate-200 hover:border-slate-300 bg-white'
+                                                        ? 'border-blue-500 bg-blue-50'
+                                                        : 'border-slate-200 hover:border-slate-300 bg-white'
                                                         }`}
                                                 >
                                                     <div className="flex items-start justify-between mb-2">
@@ -260,8 +260,8 @@ const ReturnBook = () => {
                                                     <div>
                                                         <p className="text-sm text-slate-600">Due</p>
                                                         <p className={`font-semibold text-sm ${calculateFine(selectedTransaction.dueDate) > 0
-                                                                ? 'text-red-600'
-                                                                : 'text-slate-900'
+                                                            ? 'text-red-600'
+                                                            : 'text-slate-900'
                                                             }`}>
                                                             {new Date(selectedTransaction.dueDate).toLocaleDateString()}
                                                         </p>

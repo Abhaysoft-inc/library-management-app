@@ -84,10 +84,10 @@ const ApprovedStudents = () => {
     return (
         <div className="flex h-screen bg-slate-50">
             <AdminSidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-            
+
             <div className="flex-1 flex flex-col overflow-hidden">
                 <AdminHeader isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-                
+
                 <main className="flex-1 overflow-y-auto">
                     <div className="p-6 lg:p-8">
                         {/* Header */}
