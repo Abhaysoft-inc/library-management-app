@@ -7,9 +7,9 @@ const notificationService = require('../services/notificationService');
 const router = express.Router();
 
 // @route   GET /api/students
-// @desc    Get all students (Admin/Librarian)
-// @access  Private (Admin/Librarian)
-router.get('/', authenticate, authorize('admin', 'librarian'), async (req, res) => {
+// @desc    Get all students (Admin only)
+// @access  Private (Admin only)
+router.get('/', authenticate, authorize('admin'), async (req, res) => {
     try {
         const {
             page = 1,
@@ -77,12 +77,12 @@ router.get('/', authenticate, authorize('admin', 'librarian'), async (req, res) 
 
 // @route   GET /api/students/:id
 // @desc    Get student profile
-// @access  Private (Own profile or Admin/Librarian)
+// @access  Private (Own profile or Admin)
 router.get('/:id', authenticate, async (req, res) => {
     try {
         // Check if user can access this profile
         if (req.user._id.toString() !== req.params.id &&
-            !['admin', 'librarian'].includes(req.user.role)) {
+            req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Access denied'
@@ -128,12 +128,12 @@ router.get('/:id', authenticate, async (req, res) => {
 
 // @route   PUT /api/students/:id
 // @desc    Update student profile
-// @access  Private (Own profile or Admin/Librarian)
+// @access  Private (Own profile or Admin)
 router.put('/:id', authenticate, async (req, res) => {
     try {
         // Check if user can update this profile
         if (req.user._id.toString() !== req.params.id &&
-            !['admin', 'librarian'].includes(req.user.role)) {
+            req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Access denied'
@@ -190,10 +190,10 @@ router.put('/:id', authenticate, async (req, res) => {
     }
 });
 
-// @route   POST /api/students/:id/approve
+// @route   POST/PATCH /api/students/:id/approve
 // @desc    Approve student registration
-// @access  Private (Admin/Librarian)
-router.post('/:id/approve', authenticate, authorize('admin', 'librarian'), async (req, res) => {
+// @access  Private (Admin only)
+router.post('/:id/approve', authenticate, authorize('admin'), async (req, res) => {
     try {
         const student = await User.findById(req.params.id);
         if (!student || student.role !== 'student') {
@@ -230,10 +230,81 @@ router.post('/:id/approve', authenticate, authorize('admin', 'librarian'), async
     }
 });
 
-// @route   POST /api/students/:id/reject
+// PATCH method support for approve
+router.patch('/:id/approve', authenticate, authorize('admin'), async (req, res) => {
+    try {
+        const student = await User.findById(req.params.id);
+        if (!student || student.role !== 'student') {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+
+        if (student.isApproved) {
+            return res.status(400).json({
+                success: false,
+                message: 'Student is already approved'
+            });
+        }
+
+        student.isApproved = true;
+        await student.save();
+
+        // Send approval email to student
+        notificationService.sendAccountApprovalNotification(student.email, student.name);
+
+        res.json({
+            success: true,
+            message: 'Student approved successfully'
+        });
+
+    } catch (error) {
+        console.error('Approve student error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while approving student'
+        });
+    }
+});
+
+// @route   POST/PATCH /api/students/:id/reject
 // @desc    Reject student registration
-// @access  Private (Admin/Librarian)
-router.post('/:id/reject', authenticate, authorize('admin', 'librarian'), async (req, res) => {
+// @access  Private (Admin only)
+router.post('/:id/reject', authenticate, authorize('admin'), async (req, res) => {
+    try {
+        const { reason } = req.body;
+
+        const student = await User.findById(req.params.id);
+        if (!student || student.role !== 'student') {
+            return res.status(404).json({
+                success: false,
+                message: 'Student not found'
+            });
+        }
+
+        student.isApproved = false;
+        student.isActive = false;
+        await student.save();
+
+        // TODO: Send rejection email to student with reason
+
+        res.json({
+            success: true,
+            message: 'Student registration rejected'
+        });
+
+    } catch (error) {
+        console.error('Reject student error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while rejecting student'
+        });
+    }
+});
+
+// PATCH method support for reject
+router.patch('/:id/reject', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { reason } = req.body;
 
@@ -267,8 +338,8 @@ router.post('/:id/reject', authenticate, authorize('admin', 'librarian'), async 
 
 // @route   GET /api/students/pending/list
 // @desc    Get pending student approvals
-// @access  Private (Admin/Librarian)
-router.get('/pending/list', authenticate, authorize('admin', 'librarian'), async (req, res) => {
+// @access  Private (Admin only)
+router.get('/pending/list', authenticate, authorize('admin'), async (req, res) => {
     try {
         const pendingStudents = await User.find({
             role: 'student',
@@ -296,8 +367,8 @@ router.get('/pending/list', authenticate, authorize('admin', 'librarian'), async
 
 // @route   GET /api/students/stats/overview
 // @desc    Get student statistics
-// @access  Private (Admin/Librarian)
-router.get('/stats/overview', authenticate, authorize('admin', 'librarian'), async (req, res) => {
+// @access  Private (Admin only)
+router.get('/stats/overview', authenticate, authorize('admin'), async (req, res) => {
     try {
         const totalStudents = await User.countDocuments({ role: 'student', isActive: true });
         const approvedStudents = await User.countDocuments({ role: 'student', isApproved: true, isActive: true });

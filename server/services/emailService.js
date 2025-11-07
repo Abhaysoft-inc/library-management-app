@@ -40,7 +40,7 @@ class EmailService {
                 <h2 style="color: #2563eb;">Welcome to EE Department Library!</h2>
                 <p>Dear ${studentName},</p>
                 <p>Thank you for registering with the Electrical Engineering Department Library Management System.</p>
-                <p>Your account is currently <strong>pending approval</strong>. Our librarian will review your registration and approve it shortly.</p>
+                <p>Your account is currently <strong>pending approval</strong>. Our administrator will review your registration and approve it shortly.</p>
                 <p>Once approved, you'll be able to:</p>
                 <ul>
                     <li>Browse our extensive collection of engineering books</li>

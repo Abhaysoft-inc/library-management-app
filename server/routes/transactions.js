@@ -20,9 +20,9 @@ const ensureBookFields = (book, userId) => {
 };
 
 // @route   GET /api/transactions
-// @desc    Get all transactions (for librarians/admins)
-// @access  Private (Librarian/Admin)
-router.get('/', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Get all transactions (for admins)
+// @access  Private (Admin only)
+router.get('/', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { page = 1, limit = 50, status, studentId, bookId } = req.query;
 
@@ -44,18 +44,28 @@ router.get('/', authenticate, authorize('librarian', 'admin'), async (req, res) 
         // Get transactions with populated fields
         const transactions = await Transaction.find(query)
             .populate('studentId', 'name email studentId')
-            .populate('bookId', 'title author isbn')
+            .populate('bookId', 'title author ISBN')
             .sort({ createdAt: -1 })
             .skip(skip)
-            .limit(parseInt(limit));
+            .limit(parseInt(limit))
+            .lean();
 
         // Get total count for pagination
         const total = await Transaction.countDocuments(query);
 
+        // Transform data to match frontend expectations
+        const transformedTransactions = transactions.map(t => ({
+            ...t,
+            student: t.studentId,
+            book: t.bookId,
+            fine: t.fine?.amount || 0,
+            finePaid: t.fine?.isPaid || false
+        }));
+
         res.json({
             success: true,
             data: {
-                transactions: transactions,
+                transactions: transformedTransactions,
                 pagination: {
                     currentPage: parseInt(page),
                     totalPages: Math.ceil(total / parseInt(limit)),
@@ -89,7 +99,7 @@ router.get('/my-transactions', authenticate, async (req, res) => {
 
         const transactions = await Transaction.find(query)
             .populate('bookId', 'title author isbn image category')
-            .populate('librarianId', 'name')
+            .populate('issuedBy', 'name')
             .populate('returnProcessedBy', 'name')
             .sort({ issueDate: -1 })
             .limit(limit * 1)
@@ -120,9 +130,9 @@ router.get('/my-transactions', authenticate, async (req, res) => {
 });
 
 // @route   POST /api/transactions/issue
-// @desc    Issue a book to student
-// @access  Private (Librarian/Admin)
-router.post('/issue', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Issue a book to a student
+// @access  Private (Admin only)
+router.post('/issue', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { studentId, bookId, notes } = req.body;
 
@@ -202,7 +212,7 @@ router.post('/issue', authenticate, authorize('librarian', 'admin'), async (req,
             studentId,
             bookId,
             dueDate,
-            librarianId: req.user._id,
+            issuedBy: req.user._id,
             notes,
             bookConditionAtIssue: book.condition || 'Good'
         });
@@ -222,7 +232,7 @@ router.post('/issue', authenticate, authorize('librarian', 'admin'), async (req,
         const populatedTransaction = await Transaction.findById(transaction._id)
             .populate('studentId', 'name studentId email')
             .populate('bookId', 'title author isbn')
-            .populate('librarianId', 'name');
+            .populate('issuedBy', 'name');
 
         // Send email notification
         notificationService.sendBookIssuedNotification(populatedTransaction);
@@ -265,7 +275,7 @@ router.put('/return/:id', authenticate, async (req, res) => {
 
         // Check if user can return this book
         if (req.user._id.toString() !== transaction.studentId._id.toString() &&
-            !['admin', 'librarian'].includes(req.user.role)) {
+            req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Access denied'
@@ -309,8 +319,8 @@ router.put('/return/:id', authenticate, async (req, res) => {
 
 // @route   POST /api/transactions/return
 // @desc    Return a book
-// @access  Private (Librarian/Admin)
-router.post('/return', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @access  Private (Admin only)
+router.post('/return', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { transactionId, bookCondition, notes } = req.body;
 
@@ -470,12 +480,12 @@ router.post('/:id/renew', authenticate, checkApproval, async (req, res) => {
 
 // @route   GET /api/transactions/student/:studentId
 // @desc    Get student's transaction history
-// @access  Private (Own transactions or Librarian/Admin)
+// @access  Private (Own transactions or Admin)
 router.get('/student/:studentId', authenticate, async (req, res) => {
     try {
         // Check if user can access these transactions
         if (req.user._id.toString() !== req.params.studentId &&
-            !['admin', 'librarian'].includes(req.user.role)) {
+            req.user.role !== 'admin') {
             return res.status(403).json({
                 success: false,
                 message: 'Access denied'
@@ -490,8 +500,8 @@ router.get('/student/:studentId', authenticate, async (req, res) => {
         }
 
         const transactions = await Transaction.find(query)
-            .populate('bookId', 'title author isbn image category')
-            .populate('librarianId', 'name')
+            .populate('bookId', 'title author isbn category')
+            .populate('issuedBy', 'name')
             .populate('returnProcessedBy', 'name')
             .sort({ issueDate: -1 })
             .limit(limit * 1)
@@ -521,9 +531,9 @@ router.get('/student/:studentId', authenticate, async (req, res) => {
 });
 
 // @route   GET /api/transactions/overdue
-// @desc    Get overdue transactions
-// @access  Private (Librarian/Admin)
-router.get('/overdue', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Get all overdue transactions
+// @access  Private (Admin only)
+router.get('/overdue', authenticate, authorize('admin'), async (req, res) => {
     try {
         const transactions = await Transaction.findOverdueTransactions();
 
@@ -554,8 +564,8 @@ router.get('/overdue', authenticate, authorize('librarian', 'admin'), async (req
 
 // @route   GET /api/transactions/due-soon
 // @desc    Get transactions due soon (for notifications)
-// @access  Private (Librarian/Admin)
-router.get('/due-soon', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @access  Private (Admin only)
+router.get('/due-soon', authenticate, authorize('admin'), async (req, res) => {
     try {
         const days = parseInt(req.query.days) || 3;
         const transactions = await Transaction.findDueSoonTransactions(days);
@@ -578,8 +588,8 @@ router.get('/due-soon', authenticate, authorize('librarian', 'admin'), async (re
 
 // @route   GET /api/transactions/stats
 // @desc    Get transaction statistics
-// @access  Private (Librarian/Admin)
-router.get('/stats', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @access  Private (Admin only)
+router.get('/stats', authenticate, authorize('admin'), async (req, res) => {
     try {
         const stats = await Transaction.getTransactionStats();
 
@@ -619,10 +629,60 @@ router.get('/stats', authenticate, authorize('librarian', 'admin'), async (req, 
     }
 });
 
-// @route   POST /api/transactions/:id/pay-fine
+// @route   POST/PATCH /api/transactions/:id/pay-fine
 // @desc    Pay fine for a transaction
-// @access  Private (Librarian/Admin)
-router.post('/:id/pay-fine', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @access  Private (Admin only)
+router.post('/:id/pay-fine', authenticate, authorize('admin'), async (req, res) => {
+    try {
+        const { amount } = req.body;
+
+        const transaction = await Transaction.findById(req.params.id);
+        if (!transaction) {
+            return res.status(404).json({
+                success: false,
+                message: 'Transaction not found'
+            });
+        }
+
+        if (transaction.fine.amount <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'No fine to pay'
+            });
+        }
+
+        if (transaction.fine.isPaid) {
+            return res.status(400).json({
+                success: false,
+                message: 'Fine already paid'
+            });
+        }
+
+        transaction.fine.isPaid = true;
+        transaction.fine.paidDate = new Date();
+        transaction.fine.paidAmount = amount || transaction.fine.amount;
+
+        await transaction.save();
+
+        res.json({
+            success: true,
+            message: 'Fine paid successfully',
+            data: {
+                transaction
+            }
+        });
+
+    } catch (error) {
+        console.error('Pay fine error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Server error while processing fine payment'
+        });
+    }
+});
+
+// PATCH support for pay-fine
+router.patch('/:id/pay-fine', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { amount } = req.body;
 
@@ -672,9 +732,9 @@ router.post('/:id/pay-fine', authenticate, authorize('librarian', 'admin'), asyn
 });
 
 // @route   PUT /api/transactions/collect/:id
-// @desc    Collect a book from student (Librarian initiated return)
-// @access  Private (Librarian/Admin)
-router.put('/collect/:id', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Collect a book from student (Admin initiated return)
+// @access  Private (Admin only)
+router.put('/collect/:id', authenticate, authorize('admin'), async (req, res) => {
     try {
         const { id: transactionId } = req.params;
         const { notes, bookCondition = 'good' } = req.body;
@@ -719,7 +779,7 @@ router.put('/collect/:id', authenticate, authorize('librarian', 'admin'), async 
         transaction.bookCondition = bookCondition;
 
         if (notes) {
-            transaction.notes = (transaction.notes || '') + '\nLibrarian Collection: ' + notes;
+            transaction.notes = (transaction.notes || '') + '\nAdmin Collection: ' + notes;
         }
 
         if (fine > 0) {

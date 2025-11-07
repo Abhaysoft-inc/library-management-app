@@ -117,9 +117,9 @@ router.get('/:id', async (req, res) => {
 });
 
 // @route   POST /api/books
-// @desc    Add new book
-// @access  Private (Librarian/Admin)
-router.post('/', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Add a new book
+// @access  Private (Admin only)
+router.post('/', authenticate, authorize('admin'), async (req, res) => {
     try {
         const {
             isbn,
@@ -210,9 +210,9 @@ router.post('/', authenticate, authorize('librarian', 'admin'), async (req, res)
 });
 
 // @route   PUT /api/books/:id
-// @desc    Update book
-// @access  Private (Librarian/Admin)
-router.put('/:id', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+// @desc    Update a book
+// @access  Private (Admin only)
+router.put('/:id', authenticate, authorize('admin'), async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         if (!book || !book.isActive) {
@@ -300,7 +300,7 @@ router.put('/:id', authenticate, authorize('librarian', 'admin'), async (req, re
 // @route   DELETE /api/books/:id
 // @desc    Delete book (soft delete)
 // @access  Private (Admin)
-router.delete('/:id', authenticate, authorize('librarian', 'admin'), async (req, res) => {
+router.delete('/:id', authenticate, authorize('admin'), async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
         if (!book) {

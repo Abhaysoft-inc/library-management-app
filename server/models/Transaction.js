@@ -77,10 +77,10 @@ const transactionSchema = new mongoose.Schema({
             ref: 'User'
         }
     }],
-    librarianId: {
+    issuedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, 'Librarian ID is required']
+        required: [true, 'Issuer ID is required']
     },
     returnProcessedBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -205,7 +205,7 @@ transactionSchema.statics.findOverdueTransactions = function () {
     })
         .populate('studentId', 'name email studentId phone')
         .populate('bookId', 'title author isbn')
-        .populate('librarianId', 'name');
+        .populate('issuedBy', 'name');
 };
 
 // Static method to find transactions due soon (for notifications)

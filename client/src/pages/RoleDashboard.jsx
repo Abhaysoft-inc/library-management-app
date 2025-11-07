@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 // Import role-specific dashboards
-import AdminDashboard from './AdminDashboard';
+import AdminDashboardNew from './AdminDashboardNew';
 import LibrarianDashboard from './LibrarianDashboard';
 import StudentDashboard from './StudentDashboard';
 
@@ -30,7 +30,7 @@ const RoleDashboard = () => {
     // Render appropriate dashboard based on user role
     switch (user.role) {
         case 'admin':
-            return <AdminDashboard />;
+            return <AdminDashboardNew />;
         case 'librarian':
             return <LibrarianDashboard />;
         case 'student':

@@ -82,7 +82,7 @@ const checkApproval = (req, res, next) => {
     if (req.user.role === 'student' && !req.user.isApproved) {
         return res.status(403).json({
             success: false,
-            message: 'Account pending approval. Please contact the librarian.'
+            message: 'Account pending approval. Please contact the administrator.'
         });
     }
     next();

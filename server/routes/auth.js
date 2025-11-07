@@ -152,7 +152,7 @@ router.post('/login', async (req, res) => {
         if (user.role === 'student' && !user.isApproved) {
             return res.status(403).json({
                 success: false,
-                message: 'Account pending approval. Please contact the librarian.'
+                message: 'Account pending approval. Please contact the administrator.'
             });
         }
 
@@ -179,71 +179,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Server error during login'
-        });
-    }
-});
-
-// @route   POST /api/auth/librarian-register
-// @desc    Register a new librarian (admin only)
-// @access  Private (Admin)
-router.post('/librarian-register', authenticate, async (req, res) => {
-    try {
-        // Check if user is admin
-        if (req.user.role !== 'admin') {
-            return res.status(403).json({
-                success: false,
-                message: 'Access denied. Admin privileges required.'
-            });
-        }
-
-        const { name, email, password, phone } = req.body;
-
-        if (!name || !email || !password || !phone) {
-            return res.status(400).json({
-                success: false,
-                message: 'Please provide all required fields'
-            });
-        }
-
-        // Check if user already exists
-        const existingUser = await User.findOne({ email: email.toLowerCase() });
-        if (existingUser) {
-            return res.status(400).json({
-                success: false,
-                message: 'User with this email already exists'
-            });
-        }
-
-        // Generate librarian ID
-        const librarianCount = await User.countDocuments({ role: 'librarian' });
-        const librarianId = `LIB${String(librarianCount + 1).padStart(3, '0')}`;
-
-        const librarian = new User({
-            studentId: librarianId,
-            name,
-            email: email.toLowerCase(),
-            password,
-            phone,
-            role: 'librarian',
-            isApproved: true,
-            isEmailVerified: true
-        });
-
-        await librarian.save();
-
-        res.status(201).json({
-            success: true,
-            message: 'Librarian registered successfully',
-            data: {
-                user: librarian.getPublicProfile()
-            }
-        });
-
-    } catch (error) {
-        console.error('Librarian registration error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error during librarian registration'
         });
     }
 });

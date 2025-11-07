@@ -2,126 +2,286 @@
 
 A full-stack library management system built with React (Vite) as the frontend and Express + MongoDB as the backend. The app implements role-based access (Admin, Librarian, Student), book catalog and transaction management (borrow/return), JWT authentication, and email notifications.
 
-## Contents
+## 📁 Project Structure
 
 - `client/` — React + Vite frontend
 - `server/` — Express API and MongoDB models
 
-## Quick start
+## 🚀 Quick Start
 
-Prerequisites:
+### Prerequisites:
 
 - Node.js 18+ and npm
-- MongoDB (local or a connection string)
+- MongoDB (local or remote connection)
 
-1. Install dependencies:
+### Installation
 
+1. **Clone the repository** (if not already done)
+   ```bash
+   git clone <repository-url>
+   cd library-management-app
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   # Install server dependencies
+   cd server
+   npm install
+
+   # Install client dependencies
+   cd ../client
+   npm install
+   ```
+
+3. **Configure environment variables**
+   
+   Create a `.env` file in the `server/` directory with the following:
+   ```env
+   PORT=5000
+   MONGODB_URI=mongodb://localhost:27017/library-management
+   JWT_SECRET=your_jwt_secret_here
+   JWT_EXPIRE=7d
+   NODE_ENV=development
+   CLIENT_URL=http://localhost:5173
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=your_email@gmail.com
+   SMTP_PASS=your_app_password
+   DEFAULT_BORROW_DAYS=14
+   FINE_PER_DAY=5
+   ```
+   
+   ⚠️ **Important:** Never commit `.env` files to version control!
+
+4. **Initialize the database**
+   ```bash
+   cd server
+   
+   # Interactive setup (recommended for first-time)
+   npm run setup
+   
+   # OR full setup with test users and sample books
+   npm run setup:full
+   ```
+
+5. **Start the development servers**
+   
+   Open two terminal windows:
+   
+   **Terminal 1 - Backend:**
+   ```bash
+   cd server
+   npm run dev
+   ```
+   
+   **Terminal 2 - Frontend:**
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+6. **Access the application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:5000
+
+## 🔐 Default Login Credentials
+
+After running the setup script:
+
+- **Admin:** admin@eelibrary.com / Admin@123456
+- **Librarian:** librarian@eelibrary.com / Librarian@123 *(full setup only)*
+- **Student:** student@eelibrary.com / Student@123 *(full setup only)*
+
+⚠️ Change these passwords after first login!
+
+## 📦 Client (Frontend)
+
+**Location:** `client/`
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Run Vite dev server |
+| `npm run build` | Build production bundle |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+
+### Tech Stack
+- React 18
+- React Router v6
+- Redux Toolkit
+- Tailwind CSS
+- Vite
+
+### Key Features
+- Role-based dashboards
+- Book browsing and search
+- Transaction management
+- User profile management
+- Responsive design
+
+## 🔧 Server (Backend)
+
+**Location:** `server/`
+
+### Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run server (production) |
+| `npm run dev` | Run with nodemon (development) |
+| `npm run setup` | Interactive database setup |
+| `npm run setup:full` | Full setup with test data |
+
+### Tech Stack
+- Node.js & Express
+- MongoDB & Mongoose
+- JWT Authentication
+- Bcrypt for password hashing
+- Nodemailer for emails
+- Express Validator
+
+### Project Structure
+```
+server/
+├── middleware/     # Auth & validation
+├── models/         # Mongoose schemas
+├── routes/         # API endpoints
+├── services/       # Business logic
+├── setup.js        # Database setup script
+└── index.js        # Entry point
+```
+
+## 📚 API Overview
+
+### Endpoints
+
+- **Authentication**
+  - `POST /api/auth/login` — Login and receive JWT
+  - `POST /api/auth/register` — Register new user
+  - `POST /api/auth/forgot-password` — Request password reset
+  - `POST /api/auth/reset-password/:token` — Reset password
+  - `GET /api/auth/verify-email/:token` — Verify email
+
+- **Books**
+  - `GET /api/books` — List/search books
+  - `GET /api/books/:id` — Get book details
+  - `POST /api/books` — Add new book (Admin/Librarian)
+  - `PUT /api/books/:id` — Update book (Admin/Librarian)
+  - `DELETE /api/books/:id` — Delete book (Admin/Librarian)
+
+- **Transactions**
+  - `POST /api/transactions/issue` — Issue a book
+  - `POST /api/transactions/return` — Return a book
+  - `GET /api/transactions/history` — Get transaction history
+  - `GET /api/transactions/pending` — Get pending transactions
+
+- **Students** (Admin/Librarian only)
+  - `GET /api/students` — List all students
+  - `GET /api/students/:id` — Get student details
+  - `PUT /api/students/:id/approve` — Approve registration
+  - `PUT /api/students/:id/block` — Block/Unblock student
+
+For detailed API documentation, see `server/README.md`.
+
+## 🛠️ Development
+
+### Common Tasks
+
+**Adding a new feature:**
+1. Update models if needed (`server/models/`)
+2. Create/update routes (`server/routes/`)
+3. Add frontend components (`client/src/components/`)
+4. Update Redux slices if needed (`client/src/store/slices/`)
+
+**Database migrations:**
+- The setup script handles initial database setup
+- For schema changes, create migration scripts in `server/routes/migration.js`
+
+### Troubleshooting
+
+**MongoDB connection issues:**
 ```bash
-cd client && npm install
-cd ../server && npm install
+# Check if MongoDB is running
+mongosh
+
+# Start MongoDB (varies by OS)
+# Windows: services.msc -> MongoDB
+# Linux: sudo systemctl start mongod
+# Mac: brew services start mongodb-community
 ```
 
-2. Create a `.env` file in `server/` (see Environment variables section).
+**Port already in use:**
+- Change `PORT` in `server/.env`
+- Change Vite port in `client/vite.config.js`
 
-3. Start services in separate terminals:
-
+**Module errors:**
 ```bash
-# server (development)
-cd server && npm run dev
-
-# client (development)
-cd client && npm run dev
+# Clear and reinstall dependencies
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-The client usually runs on http://localhost:5173 and the server on http://localhost:5000.
+## 🧪 Testing
 
-## Environment variables (server)
+The application includes:
+- Input validation using express-validator
+- JWT authentication middleware
+- Rate limiting for security
+- Error handling middleware
 
-Add a `.env` file to `server/` with the following keys (examples):
+## 🚢 Deployment
 
-```
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/ee_library
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRE=7d
-CLIENT_URL=http://localhost:5173
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=you@example.com
-SMTP_PASS=supersecret
-DEFAULT_BORROW_DAYS=14
-FINE_PER_DAY=5
-```
+### Backend
+1. Set `NODE_ENV=production` in `.env`
+2. Use a production MongoDB instance
+3. Generate strong `JWT_SECRET`
+4. Configure SMTP for emails
+5. Deploy to Heroku, AWS, DigitalOcean, Railway, etc.
 
-Important: Do not commit secrets to version control.
+### Frontend
+1. Build: `npm run build` in `client/`
+2. Deploy the `dist/` folder to Vercel, Netlify, AWS S3, etc.
+3. Update API base URL in `client/src/services/api.js`
 
-## Client (frontend)
+## 📝 Features
 
-Location: `client/`
+### User Roles
+- **Admin:** Full system access, user management
+- **Librarian:** Book management, approve transactions
+- **Student:** Browse books, borrow/return, view history
 
-Useful scripts (from `client/package.json`):
+### Key Functionality
+- ✅ Role-based authentication & authorization
+- ✅ Book catalog management
+- ✅ Transaction tracking (issue/return)
+- ✅ Email notifications
+- ✅ Fine calculation
+- ✅ User approval workflow
+- ✅ Search and filtering
+- ✅ Responsive UI
 
-- `npm run dev` — run Vite dev server
-- `npm run build` — build production bundle
-- `npm run preview` — preview production build
-- `npm run lint` — run ESLint
+## 🤝 Contributing
 
-Main tech: React, React Router, Redux Toolkit, Tailwind CSS.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-API calls are made from `client/src/services/api.js` — update the base URL there if the server runs elsewhere.
+## 📄 License
 
-## Server (backend)
+This project is licensed under the ISC License.
 
-Location: `server/`
+## 👨‍💻 Support
 
-Useful scripts (from `server/package.json`):
-
-- `npm run dev` — run server with nodemon (development)
-- `npm run start` — run server with node (production)
-
-Key folders:
-
-- `server/models/` — Mongoose models: User, Book, Transaction, Category
-- `server/routes/` — Express route handlers for auth, books, transactions, migrations
-- `server/middleware/` — auth middleware (JWT verification)
-- `server/services/` — email and notification utilities
-
-## Seeding & utilities
-
-Server contains helper scripts to create test users and sample books (e.g., `createTestAdmin.js`, `createSampleBooks.js`). Run them from the `server/` folder:
-
-```bash
-node createSampleBooks.js
-node createTestAdmin.js
-```
-
-Be careful not to run seed scripts against production databases.
-
-## API overview
-
-- `POST /api/auth/login` — authenticate and receive JWT
-- `POST /api/auth/register` — register new user
-- `GET /api/books` — list/search books
-- `GET /api/books/:id` — book details
-- `POST /api/transactions/borrow` — borrow a book (protected)
-- `POST /api/transactions/return` — return a book (protected)
-
-Check the detailed route files in `server/routes/` for validation rules and full request/response shapes.
-
-## Contributing
-
-1. Create a branch: `git checkout -b feature/your-feature`
-2. Make changes and run linters/tests
-3. Open a pull request with a clear description
-
-## License
-
-Add a `LICENSE` file to specify the project's license.
+For issues and questions:
+- Check the troubleshooting section
+- Review the server and client READMEs
+- Create an issue in the repository
 
 ---
 
-If you'd like, I can:
-
-- Add `client/README.md` and `server/README.md` with focused instructions and examples.
-- Create a `server/.env.example` file with the recommended environment variables.
+**Made with ❤️ for efficient library management**
 
