@@ -18,7 +18,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import AdminHeader from '../components/AdminHeader';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || 'https://library-management-server-fk6j.onrender.com/api';
 
 const BooksManagement = () => {
     const navigate = useNavigate();
@@ -300,8 +300,8 @@ const BooksManagement = () => {
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <span className={`px-3 py-1 text-xs font-semibold rounded-full ${book.availableCopies > 0
-                                                            ? 'bg-emerald-100 text-emerald-700'
-                                                            : 'bg-red-100 text-red-700'
+                                                        ? 'bg-emerald-100 text-emerald-700'
+                                                        : 'bg-red-100 text-red-700'
                                                         }`}>
                                                         {book.availableCopies}/{book.totalCopies}
                                                     </span>

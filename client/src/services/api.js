@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// Prefer environment variable, fallback to deployed Render URL
+const API_BASE_URL =
+    import.meta?.env?.VITE_API_BASE_URL?.trim() ||
+    'https://library-management-server-fk6j.onrender.com/api';
 
 // Create axios instance
 const api = axios.create({

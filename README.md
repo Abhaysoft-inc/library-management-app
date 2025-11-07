@@ -35,7 +35,7 @@ A full-stack library management system built with React (Vite) as the frontend a
 
 3. **Configure environment variables**
    
-   Create a `.env` file in the `server/` directory with the following:
+   Use the example file at `server/.env.example` as a template and create your own `server/.env`:
    ```env
    PORT=5000
    MONGODB_URI=mongodb://localhost:27017/library-management
@@ -51,7 +51,19 @@ A full-stack library management system built with React (Vite) as the frontend a
    FINE_PER_DAY=5
    ```
    
-   ⚠️ **Important:** Never commit `.env` files to version control!
+   ⚠️ **Important:** `.env` files are ignored by git. If a real `.env` was ever committed, rotate those credentials immediately and force-push a cleanup or invalidate the leaked secrets.
+
+   Deploying to Render? Add these variables in the Render Dashboard (Environment tab) instead of committing them:
+   - `MONGODB_URI`
+   - `DATABASE_NAME`
+   - `JWT_SECRET`
+   - `JWT_EXPIRE`
+   - `NODE_ENV`
+   - `PORT`
+   - `CLIENT_URL`
+   - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`
+   - `UPLOAD_PATH`, `MAX_FILE_SIZE`
+   - `DEFAULT_BORROW_DAYS`, `RENEWAL_LIMIT`, `FINE_PER_DAY`
 
 4. **Initialize the database**
    ```bash
