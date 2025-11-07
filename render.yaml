@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: library-management-server
+    env: node
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    autoDeploy: true
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 20

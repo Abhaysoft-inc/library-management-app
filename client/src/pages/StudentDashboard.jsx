@@ -123,7 +123,7 @@ const StudentDashboard = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex flex-col md:flex-row">
             {/* Mobile Overlay */}
             {isSidebarOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                 ></div>
@@ -184,8 +184,8 @@ const StudentDashboard = () => {
                     <button
                         onClick={() => setActiveTab('overview')}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${activeTab === 'overview'
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`}
                     >
                         <TrendingUp className="w-5 h-5 flex-shrink-0" />
@@ -196,8 +196,8 @@ const StudentDashboard = () => {
                     <button
                         onClick={() => setActiveTab('current-books')}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${activeTab === 'current-books'
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`}
                     >
                         <BookOpen className="w-5 h-5 flex-shrink-0" />
@@ -212,8 +212,8 @@ const StudentDashboard = () => {
                     <button
                         onClick={() => setActiveTab('history')}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${activeTab === 'history'
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`}
                     >
                         <History className="w-5 h-5 flex-shrink-0" />
@@ -223,8 +223,8 @@ const StudentDashboard = () => {
                     <button
                         onClick={() => setActiveTab('browse')}
                         className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all ${activeTab === 'browse'
-                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
-                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/50'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                             }`}
                     >
                         <Book className="w-5 h-5 flex-shrink-0" />
@@ -416,8 +416,8 @@ const StudentDashboard = () => {
                                                                     </span>
                                                                 ) : (
                                                                     <span className={`px-2 md:px-3 py-1 text-xs font-semibold rounded-lg whitespace-nowrap ${daysLeft <= 3
-                                                                            ? 'bg-amber-100 text-amber-700'
-                                                                            : 'bg-blue-100 text-blue-700'
+                                                                        ? 'bg-amber-100 text-amber-700'
+                                                                        : 'bg-blue-100 text-blue-700'
                                                                         }`}>
                                                                         {daysLeft}d left
                                                                     </span>
@@ -455,10 +455,10 @@ const StudentDashboard = () => {
                                                 <div key={transaction._id} className="flex items-center justify-between p-4 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                                                     <div className="flex items-center gap-4">
                                                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${transaction.status === 'returned'
-                                                                ? 'bg-emerald-100'
-                                                                : isOverdue(transaction.dueDate)
-                                                                    ? 'bg-red-100'
-                                                                    : 'bg-blue-100'
+                                                            ? 'bg-emerald-100'
+                                                            : isOverdue(transaction.dueDate)
+                                                                ? 'bg-red-100'
+                                                                : 'bg-blue-100'
                                                             }`}>
                                                             {transaction.status === 'returned' ? (
                                                                 <CheckCircle className="w-5 h-5 text-emerald-600" />
@@ -478,10 +478,10 @@ const StudentDashboard = () => {
                                                         </div>
                                                     </div>
                                                     <span className={`px-3 py-1 text-xs font-semibold rounded-lg ${transaction.status === 'issued'
-                                                            ? isOverdue(transaction.dueDate)
-                                                                ? 'bg-red-100 text-red-700'
-                                                                : 'bg-blue-100 text-blue-700'
-                                                            : 'bg-emerald-100 text-emerald-700'
+                                                        ? isOverdue(transaction.dueDate)
+                                                            ? 'bg-red-100 text-red-700'
+                                                            : 'bg-blue-100 text-blue-700'
+                                                        : 'bg-emerald-100 text-emerald-700'
                                                         }`}>
                                                         {transaction.status === 'issued' && isOverdue(transaction.dueDate)
                                                             ? 'Overdue'
@@ -561,8 +561,8 @@ const StudentDashboard = () => {
                                                                     </span>
                                                                 ) : (
                                                                     <span className={`px-3 py-1.5 text-xs font-bold rounded-lg ${daysLeft <= 3
-                                                                            ? 'bg-amber-100 text-amber-700'
-                                                                            : 'bg-emerald-100 text-emerald-700'
+                                                                        ? 'bg-amber-100 text-amber-700'
+                                                                        : 'bg-emerald-100 text-emerald-700'
                                                                         }`}>
                                                                         {daysLeft} days remaining
                                                                     </span>
@@ -691,12 +691,12 @@ const StudentDashboard = () => {
                                                     </td>
                                                     <td className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">
                                                         <span className={`inline-flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 text-xs font-semibold rounded-lg ${transaction.status === 'issued'
-                                                                ? isOverdue(transaction.dueDate)
-                                                                    ? 'bg-red-100 text-red-700'
-                                                                    : 'bg-blue-100 text-blue-700'
-                                                                : transaction.status === 'returned'
-                                                                    ? 'bg-emerald-100 text-emerald-700'
-                                                                    : 'bg-slate-100 text-slate-700'
+                                                            ? isOverdue(transaction.dueDate)
+                                                                ? 'bg-red-100 text-red-700'
+                                                                : 'bg-blue-100 text-blue-700'
+                                                            : transaction.status === 'returned'
+                                                                ? 'bg-emerald-100 text-emerald-700'
+                                                                : 'bg-slate-100 text-slate-700'
                                                             }`}>
                                                             {transaction.status === 'issued' && isOverdue(transaction.dueDate) ? (
                                                                 <>
