@@ -21,7 +21,7 @@ app.use(requestLogger);
 // Database Connection
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ee_library');
+        const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://abhaya:Abhay123123@cluster0.ev63eff.mongodb.net/?appName=Cluster0');
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error('Database connection error:', error);
