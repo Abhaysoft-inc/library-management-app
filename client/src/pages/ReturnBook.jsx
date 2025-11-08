@@ -28,7 +28,7 @@ const ReturnBook = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
-    const [condition, setCondition] = useState('good');
+    const [condition, setCondition] = useState('Good');
     const [notes, setNotes] = useState('');
 
     useEffect(() => {
@@ -40,12 +40,16 @@ const ReturnBook = () => {
             const token = localStorage.getItem('token');
             const response = await axios.get(`${API_BASE_URL}/transactions`, {
                 headers: { Authorization: `Bearer ${token}` },
-                params: { status: 'issued' }
+                params: { status: 'all' }
             });
 
             if (response.data.success) {
-                setActiveTransactions(response.data.data.transactions || []);
-                setFilteredTransactions(response.data.data.transactions || []);
+                // Filter to only show issued and overdue transactions
+                const activeOnly = (response.data.data.transactions || []).filter(
+                    t => t.status === 'issued' || t.status === 'overdue'
+                );
+                setActiveTransactions(activeOnly);
+                setFilteredTransactions(activeOnly);
             }
         } catch (error) {
             console.error('Error fetching transactions:', error);
@@ -296,11 +300,11 @@ const ReturnBook = () => {
                                                 required
                                                 className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                             >
-                                                <option value="excellent">Excellent</option>
-                                                <option value="good">Good</option>
-                                                <option value="fair">Fair</option>
-                                                <option value="poor">Poor</option>
-                                                <option value="damaged">Damaged</option>
+                                                <option value="New">New</option>
+                                                <option value="Good">Good</option>
+                                                <option value="Fair">Fair</option>
+                                                <option value="Poor">Poor</option>
+                                                <option value="Damaged">Damaged</option>
                                             </select>
                                         </div>
 

@@ -9,9 +9,14 @@ const router = express.Router();
 
 // Generate JWT token
 const generateToken = (userId) => {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+        console.error('JWT_SECRET is not defined in environment variables');
+        throw new Error('JWT configuration error');
+    }
     return jwt.sign(
         { userId },
-        process.env.JWT_SECRET,
+        secret,
         { expiresIn: process.env.JWT_EXPIRE || '7d' }
     );
 };
