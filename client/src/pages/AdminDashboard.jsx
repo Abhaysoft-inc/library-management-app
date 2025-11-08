@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 
+// Force fresh build - v2
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || 'https://library-management-server-fk6j.onrender.com/api';
 
 const AdminDashboard = () => {

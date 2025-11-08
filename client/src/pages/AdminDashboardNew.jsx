@@ -20,7 +20,7 @@ import AdminSidebar from '../components/AdminSidebar';
 import AdminHeader from '../components/AdminHeader';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://library-management-server-fk6j.onrender.com/api';
 
 const AdminDashboardNew = () => {
     const navigate = useNavigate();
@@ -300,8 +300,8 @@ const AdminDashboardNew = () => {
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <span className={`px-3 py-1 text-xs font-semibold rounded-full ${activity.status === 'issued'
-                                                                    ? 'bg-blue-100 text-blue-700'
-                                                                    : 'bg-emerald-100 text-emerald-700'
+                                                                ? 'bg-blue-100 text-blue-700'
+                                                                : 'bg-emerald-100 text-emerald-700'
                                                                 }`}>
                                                                 {activity.status === 'issued' ? 'Issued' : 'Returned'}
                                                             </span>
