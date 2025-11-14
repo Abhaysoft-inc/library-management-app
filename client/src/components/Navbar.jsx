@@ -58,22 +58,23 @@ const Navbar = () => {
         : 'bg-gradient-to-r from-blue-700 via-blue-900 to-blue-700 dark:from-blue-800 dark:via-blue-950 dark:to-blue-800'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14 sm:h-16">
 
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex items-center gap-2 text-white font-bold text-xl hover:opacity-90 transition-opacity">
+            <Link to="/" className="flex items-center gap-2 text-white font-bold text-lg sm:text-xl hover:opacity-90 transition-opacity">
               <img
                 src="/logo.png"
                 alt="EE Library Logo"
-                className="w-8 h-8 object-contain"
+                className="w-7 h-7 sm:w-8 sm:h-8 object-contain"
               />
-              <span>EE Library</span>
+              <span className="hidden xs:inline">EE Library</span>
+              <span className="xs:hidden">EE</span>
             </Link>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1 lg:gap-2">
             {isAuthenticated ? (
               <>
                 <NavLink to="/" icon={Home}>Home</NavLink>
@@ -85,8 +86,8 @@ const Navbar = () => {
 
                 {/* Notifications */}
                 <button className="relative p-2 text-white hover:text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-110">
-                  <Bell size={20} className="transition-transform duration-200" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                  <Bell size={18} className="transition-transform duration-200" />
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center animate-pulse text-[10px]">
                     3
                   </span>
                 </button>
@@ -95,12 +96,12 @@ const Navbar = () => {
                 <div className="relative">
                   <button
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
+                    className="flex items-center gap-1 lg:gap-2 px-2 lg:px-3 py-2 text-sm text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
                   >
-                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center font-semibold text-white transition-all duration-300 hover:bg-white/30">
+                    <div className="w-7 h-7 lg:w-8 lg:h-8 bg-white/20 rounded-full flex items-center justify-center font-semibold text-white text-sm transition-all duration-300 hover:bg-white/30">
                       {user?.name?.charAt(0).toUpperCase()}
                     </div>
-                    <span className="hidden lg:block">{user?.name}</span>
+                    <span className="hidden lg:block text-sm">{user?.name}</span>
                     <ChevronDown
                       size={16}
                       className={`transition-transform duration-300 ${isProfileMenuOpen ? 'rotate-180' : ''}`}
@@ -134,37 +135,35 @@ const Navbar = () => {
                 <NavLink to="/" icon={Home}>Home</NavLink>
                 <AnimatedThemeToggler className="p-2 text-white hover:text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-110" />
                 <NavLink to="/login" icon={User}>Login</NavLink>
-                <Link to="/register" className="bg-white text-blue-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-50 hover:shadow-md transition-all duration-200 hover:scale-105">Register</Link>
+                <Link to="/register" className="bg-white text-blue-700 px-3 lg:px-4 py-2 rounded-md text-xs lg:text-sm font-medium hover:bg-blue-50 hover:shadow-md transition-all duration-200 hover:scale-105">Register</Link>
               </>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white p-2 hover:bg-white/30 rounded-lg transition-all duration-200 hover:scale-110">
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          <div className="md:hidden flex items-center gap-2">
+            <AnimatedThemeToggler className="p-1.5 text-white hover:text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-110" />
+            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-white p-1.5 hover:bg-white/30 rounded-lg transition-all duration-200 hover:scale-110">
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden py-2 space-y-1 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+        <div className={`md:hidden pb-3 space-y-1 transform transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
           {isAuthenticated ? (
             <>
               <NavLink to="/" icon={Home}>Home</NavLink>
               <NavLink to="/books" icon={BookOpen}>Books</NavLink>
               <NavLink to="/dashboard" icon={LayoutDashboard}>Dashboard</NavLink>
               <NavLink to="/profile" icon={User}>Profile</NavLink>
-              <div className="px-4 py-2">
-                <AnimatedThemeToggler className="p-2 text-white hover:text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-110" />
-              </div>
               {(user?.role === 'admin' || user?.role === 'librarian') && (
                 <NavLink to={user.role === 'admin' ? '/admin' : '/librarian'} icon={Settings}>
                   {user.role === 'admin' ? 'Admin Panel' : 'Librarian Panel'}
                 </NavLink>
               )}
-              <button onClick={handleLogout} className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white hover:bg-white/30 hover:text-red-200 rounded-md w-full transition-all duration-200 hover:scale-105">
+              <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white hover:bg-white/30 hover:text-red-200 rounded-md w-full transition-all duration-200 hover:scale-105">
                 <LogOut size={18} /> Logout
               </button>
             </>
@@ -173,9 +172,6 @@ const Navbar = () => {
               <NavLink to="/" icon={Home}>Home</NavLink>
               <NavLink to="/login" icon={User}>Login</NavLink>
               <NavLink to="/register" icon={User}>Register</NavLink>
-              <div className="px-4 py-2">
-                <AnimatedThemeToggler className="p-2 text-white hover:text-white hover:bg-white/30 rounded-lg transition-all duration-300 ease-in-out hover:scale-110" />
-              </div>
             </>
           )}
         </div>
