@@ -43,8 +43,8 @@ const Navbar = () => {
     <Link
       to={to}
       className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${isActiveRoute(to)
-          ? 'bg-white text-blue-700 shadow-md hover:shadow-lg hover:scale-105'
-          : 'text-white hover:bg-white/30 hover:text-white hover:scale-105'
+        ? 'bg-white text-blue-700 shadow-md hover:shadow-lg hover:scale-105'
+        : 'text-white hover:bg-white/30 hover:text-white hover:scale-105'
         }`}
     >
       <Icon size={18} />
@@ -54,8 +54,8 @@ const Navbar = () => {
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-        ? 'bg-blue-900/30 backdrop-blur-md dark:bg-blue-950/50'
-        : 'bg-gradient-to-r from-blue-700 via-blue-900 to-blue-700 dark:from-blue-800 dark:via-blue-950 dark:to-blue-800'
+      ? 'bg-blue-900/30 backdrop-blur-md dark:bg-blue-950/50'
+      : 'bg-gradient-to-r from-blue-700 via-blue-900 to-blue-700 dark:from-blue-800 dark:via-blue-950 dark:to-blue-800'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
