@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, BookOpen, Star, Calendar, Loader } from 'lucide-react';
+import { Search, Filter, BookOpen, Star, Calendar, Loader, X } from 'lucide-react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
 const BooksPage = () => {
+    const { user } = useSelector((state) => state.auth);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showIssueModal, setShowIssueModal] = useState(false);
+    const [selectedBookForIssue, setSelectedBookForIssue] = useState(null);
+    const [students, setStudents] = useState([]);
+    const [selectedStudentId, setSelectedStudentId] = useState('');
+    const [issueNotes, setIssueNotes] = useState('');
+    const [issuingBook, setIssuingBook] = useState(false);
 
     const fetchBooks = async () => {
         try {
@@ -43,10 +51,41 @@ const BooksPage = () => {
         }
     };
 
+    // Fetch students for issue book modal (only for librarians/admins)
+    const fetchStudents = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token || (user?.role !== 'librarian' && user?.role !== 'admin')) {
+                return;
+            }
+
+            const response = await axios.get(`${API_BASE_URL}/students?limit=1000`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.data.success) {
+                // Filter only approved and active students
+                const approvedStudents = response.data.data.students.filter(
+                    student => student.isApproved && student.isActive
+                );
+                setStudents(approvedStudents);
+            }
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
+    };
+
     // Fetch books from API
     useEffect(() => {
         fetchBooks();
     }, [searchTerm, selectedCategory, selectedFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Fetch students when component mounts (for librarians)
+    useEffect(() => {
+        if (user?.role === 'librarian' || user?.role === 'admin') {
+            fetchStudents();
+        }
+    }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const categories = [
         'all', 'Electronics', 'Power Systems', 'Control Systems', 'Electrical Machines',
@@ -111,22 +150,78 @@ const BooksPage = () => {
                 return;
             }
 
+            // Check if user is librarian or admin
+            if (user?.role === 'librarian' || user?.role === 'admin') {
+                // Open modal to select student
+                const book = books.find(b => b._id === bookId);
+                setSelectedBookForIssue(book);
+                setShowIssueModal(true);
+            } else {
+                // For students, directly issue to themselves
+                const response = await axios.post(
+                    `${API_BASE_URL}/transactions/issue`,
+                    { bookId, studentId: user._id },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+
+                if (response.data.success) {
+                    alert('Book issued successfully!');
+                    fetchBooks(); // Refresh the books list
+                } else {
+                    alert(response.data.message || 'Failed to issue book');
+                }
+            }
+        } catch (error) {
+            console.error('Error issuing book:', error);
+            const errorMessage = error.response?.data?.message || 'Failed to issue book. Please try again.';
+            alert(errorMessage);
+        }
+    };
+
+    const handleConfirmIssue = async () => {
+        if (!selectedStudentId) {
+            alert('Please select a student');
+            return;
+        }
+
+        try {
+            setIssuingBook(true);
+            const token = localStorage.getItem('token');
+
             const response = await axios.post(
                 `${API_BASE_URL}/transactions/issue`,
-                { bookId },
+                {
+                    bookId: selectedBookForIssue._id,
+                    studentId: selectedStudentId,
+                    notes: issueNotes
+                },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
             if (response.data.success) {
                 alert('Book issued successfully!');
+                setShowIssueModal(false);
+                setSelectedBookForIssue(null);
+                setSelectedStudentId('');
+                setIssueNotes('');
                 fetchBooks(); // Refresh the books list
             } else {
                 alert(response.data.message || 'Failed to issue book');
             }
         } catch (error) {
             console.error('Error issuing book:', error);
-            alert('Failed to issue book. Please try again.');
+            const errorMessage = error.response?.data?.message || 'Failed to issue book. Please try again.';
+            alert(errorMessage);
+        } finally {
+            setIssuingBook(false);
         }
+    };
+
+    const handleCloseModal = () => {
+        setShowIssueModal(false);
+        setSelectedBookForIssue(null);
+        setSelectedStudentId('');
+        setIssueNotes('');
     };
 
     return (
@@ -277,6 +372,101 @@ const BooksPage = () => {
                         <BookOpen className="h-16 w-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No books found</h3>
                         <p className="text-gray-600 dark:text-gray-400">Try adjusting your search terms or filters</p>
+                    </div>
+                )}
+
+                {/* Issue Book Modal */}
+                {showIssueModal && selectedBookForIssue && (
+                    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+                        <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+                            {/* Modal Header */}
+                            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                                <h3 className="text-lg font-semibold text-gray-900">Issue Book</h3>
+                                <button
+                                    onClick={handleCloseModal}
+                                    className="text-gray-400 hover:text-gray-600 transition-colors"
+                                >
+                                    <X className="h-6 w-6" />
+                                </button>
+                            </div>
+
+                            {/* Modal Body */}
+                            <div className="p-6 space-y-4">
+                                {/* Book Info */}
+                                <div className="bg-gray-50 rounded-lg p-4">
+                                    <h4 className="font-semibold text-gray-900 mb-1">{selectedBookForIssue.title}</h4>
+                                    <p className="text-sm text-gray-600">by {selectedBookForIssue.author.join(', ')}</p>
+                                    <p className="text-sm text-gray-500 mt-2">
+                                        Available: {selectedBookForIssue.availableCopies} of {selectedBookForIssue.totalCopies}
+                                    </p>
+                                </div>
+
+                                {/* Student Selection */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Select Student *
+                                    </label>
+                                    <select
+                                        value={selectedStudentId}
+                                        onChange={(e) => setSelectedStudentId(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        required
+                                    >
+                                        <option value="">-- Select a student --</option>
+                                        {students.map((student) => (
+                                            <option key={student._id} value={student._id}>
+                                                {student.name} ({student.studentId})
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {students.length === 0 && (
+                                        <p className="text-sm text-orange-600 mt-1">No approved students available</p>
+                                    )}
+                                </div>
+
+                                {/* Notes */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Notes (Optional)
+                                    </label>
+                                    <textarea
+                                        value={issueNotes}
+                                        onChange={(e) => setIssueNotes(e.target.value)}
+                                        placeholder="Add any notes about this book issue..."
+                                        rows="3"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                    <p className="text-sm text-gray-500 mt-1">
+                                        Due date will be automatically set to 14 days from today
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+                                <button
+                                    onClick={handleCloseModal}
+                                    disabled={issuingBook}
+                                    className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleConfirmIssue}
+                                    disabled={issuingBook || !selectedStudentId}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {issuingBook ? (
+                                        <>
+                                            <Loader className="h-4 w-4 animate-spin" />
+                                            Issuing...
+                                        </>
+                                    ) : (
+                                        'Issue Book'
+                                    )}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
